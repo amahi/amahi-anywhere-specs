@@ -1,0 +1,320 @@
+<style>
+pre {
+    display: block;
+    padding: 10px;
+    margin: 0 0 10.5px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    word-break: break-all;
+    word-wrap: break-word;
+    color: #5a5a5a;
+    background-color: #f8fafc;
+    border: 1px solid #e7e9ed;
+    border-radius: 2px;
+    font-family: "Menlo", "Liberation Mono", "Consolas", "DejaVu Sans Mono", "Ubuntu Mono", "Courier New", "andale mono", "lucida console", monospace;
+}
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 2px;
+}
+pre code {
+  background-color: #f8fafc;
+}
+</style>
+<h1>Amahi Anywhere Client API Specification - v0.12</h1>
+<p>The Amahi Anywhere Clients use a REST HTTP protocol for browsing, downloading and streaming files and more.</p>
+<p>The clients can be in local mode (known as &quot;LAN&quot; or &quot;LAN Access&quot; to the user), or remote mode (known as &quot;Remote&quot;). Internally we just call them local or remote. The client can perform streaming and the rest of the functions much faster when using the local mode, being inside the user's LAN, so that should be the favored mode, when available. The client should test for local mode availability dynamically, but only when the user is interacting with the app, <em>never</em> in the background, as this will be costly in terms of battery.</p>
+<h2>API Endpoints</h2>
+<hr />
+<p>Through this document we will have the following API endpoints. The interaction with the endpoint calls is always REST-based and in JSON, unless otherwise specified.</p>
+<ol>
+<li>The <strong>Auth API</strong> endpoint: <code>api.example.com</code> <em>with</em> SSL, verified certs and port 443</li>
+<li>The <strong>PFE API</strong> endpoint (or proxy-front-end) endpoint: <code>pfe.example.com</code> <em>with</em> SSL, verified certs and port 443</li>
+<li>The <strong>Relay API</strong> endpoint is determined by the mode of operation of the client and the info in the <code>PUT /client</code> call to the PFE:</li>
+</ol>
+<ul>
+<li>in remote mode, it's the <code>relay_addr</code> parameter, <strong>always using</strong> SSL, <strong>with</strong> verified certs</li>
+<li>in local mode, it's the <code>local_addr</code> parameter, using plain HTTP, <em>without</em> SSL</li>
+</ul>
+<p><img src="API-interaction.png" alt="API Interaction Diagram" /></p>
+<p>Example of a typical sequence of accesses:</p>
+<ol>
+<li>Authenticate the user against the Amahi API endpoint</li>
+<li>GET /servers (this gives a session token to use for each server)</li>
+<li>GET /shares will return the visible shares on a given server (with the session for that server)</li>
+<li>GET /files?s=SomeShare&amp;p=/som/path/or/file.png to get a directory or a file from a server (with the proper session key)</li>
+</ol>
+<p>The user navigates their files by repeating calls like 4 above with different share names and paths.</p>
+<h2>Authentication</h2>
+<hr />
+<p>The app must collect 1) a username/email and 2) a password, from the user and authenticate this information against Amahi's servers using the <a href="http://oauth.net/">OAuth 2 protocol</a> with the <em>Amahi API</em> endpoint.</p>
+<p>In order for this to work, the app must request a pair of (string) settings from the Amahi team: 1) the App ID and 2) the App Secret. There will be two such pairs of settings, one pair for development/testing and one pair for production/release.</p>
+<p>The OAuth API endpoint base path for production is <code>/api2</code>.</p>
+<p>We use the simplified version of OAuth without web redirection.</p>
+<p>To login, the client app has to first issue a <code>POST</code> to <code>/api2/oauth/token</code> with a body containing the following in it (with the items in capital letters appropriately setup):</p>
+<pre><code>grant_type=password
+client_id=APP_ID
+client_secret=SECRET
+password=PASSWORD
+username=USERNAME
+</code></pre>
+<p>This <code>POST</code> operation will return a JSON structure in the following form:</p>
+<pre lang="json"><code>{
+    &quot;access_token&quot;: &quot;d78abb0542736865f94704521609c230dac03a2f369d043ac212d6933b91410e&quot;,
+    &quot;scope&quot;: &quot;public&quot;,
+    &quot;token_type&quot;: &quot;bearer&quot;
+}
+</code></pre>
+<p>Subsequent calls to the main auth server will have to have the <code>acces_token</code> returned by the OAuth call, like this:</p>
+<pre><code>GET /api2/servers?access_token=d78abb0542736865f94704521609c230dac03a2f369d043ac212d6933b91410e
+</code></pre>
+<h2>Initial request for Amahi servers</h2>
+<hr />
+<p>After authenticating in the user, the client should log the user in. Then it needs to request the Amahi API back-end what servers the user has, also using the <em>Amahi API</em> endpoint. The format of the call is:</p>
+<ul>
+<li>
+<p><code>GET /servers</code></p>
+</li>
+<li>
+<p>The API back-end returns an array of servers that the user has installed</p>
+</li>
+<li>
+<p>The server has a <code>name</code>, which is what is shown to the user</p>
+</li>
+<li>
+<p>The servers may be <code>active</code> (1) or not (0). If active, the user can select it and proceed to browse it. If not, the user must not be given the chance to select it (it should be &quot;greyed out&quot; or some such indication)</p>
+</li>
+<li>
+<p>Each server returns a <code>session</code> token. This is an ephimeral session value and it's <em>required for every subsequent call to the rest of the APIs</em> in the <code>Session</code> header. It may be invalidated after some time without accessing it</p>
+</li>
+<li>
+<p>Each server also has an <code>ip_address</code>, which is either an IP proper or black if the server is not running yet</p>
+</li>
+<li>
+<p>Each server has a <code>fqdn</code>, which is a FQDN with the Dynamic DNS name of the server</p>
+</li>
+<li>
+<p>Example:</p>
+<pre lang="json"><code>  [
+  	{
+  		&quot;name&quot; = &quot;server1&quot;,
+  		&quot;active&quot; = 1,
+  		&quot;session&quot; = &quot;6337fc16d9b31049e3137bb8fc74b86e6b4cb35c&quot;,
+  		&quot;ip_addr&quot; = &quot;1.2.3.4&quot;,
+  		&quot;fqdn&quot; = &quot;server1.yourhda.com&quot;
+  	},
+  	{
+  		&quot;name&quot; = &quot;server2&quot;,
+  		&quot;active&quot; = 0,
+  		&quot;session&quot; = &quot;&quot;,
+  		&quot;ip_addr&quot; = &quot;&quot;,
+  		&quot;fqdn&quot; = &quot;&quot;
+  	}
+  ]
+</code></pre>
+</li>
+</ul>
+<h2>Identifying the client to API endpoints</h2>
+<hr />
+<p>For all calls, the client must include a <code>User-Agent</code> header with its details so that we can support version-specific work-arounds. Here's what's typical for a user agent:</p>
+<pre><code>User-Agent: AmahiAnywhere/&lt;version&gt; (&lt;platform&gt;)
+</code></pre>
+<p>where version is the version of the client and platform contains details of the platform the client is running on.</p>
+<p>Examples:</p>
+<pre><code>User-Agent: AmahiAnywhere/1.3 (iPad; iOS 7.0.4; Scale/2.00)
+User-Agent: AmahiAnywhere/1.0 (Android 4.2.2)
+</code></pre>
+<p>Failure to send this header will result in a <code>400 Bad Request</code> error. We plan to enforce these</p>
+<h2>Resources on a server</h2>
+<hr />
+<h3>Timestamps</h3>
+<p>We have adopted the format of the various time fields (e.g. the <code>mtime</code> element) to be like RFC1123 but hard-coding GMT as the time zone. For example: <code>Tue, 07 May 2013 05:28:09 GMT</code>, <code>Sat, 17 Aug 2013 02:38:32 GMT</code>.</p>
+<p>If apps ever display the timestamp, they should use either relative terms (&quot;4 months ago&quot;, &quot;5 minutes ago&quot;, &quot;about a year ago&quot;) or compensate for the client's current time zone, relative to GMT: someone in GMT+1 should see the same time in the element, plus one hour (using time arithmetic).</p>
+<h3>Initial Client Connection</h3>
+<p>When the client connects to the PFE, the client issues a PUT /client request.  The proxy will return info about how to connect to a given server (HDA).</p>
+<p>The client will have two operating modes (prefrably automaticly detected), <strong>local mode</strong> (when in the local LAN to the HDA) and <strong>remote mode</strong> (when not in the local LAN to the HDA and all access is done via the proxy). Any subsequent requests must be done to either of these two endpoints. Their addresses are obtained by this initial client call to the PFE.</p>
+<ul>
+<li>
+<p><code>PUT /client</code></p>
+</li>
+<li>
+<p>Proxy returns the Amahi Anywhere client version, local address/port and the proxy address/port the HDA is connected to.</p>
+</li>
+<li>
+<p>The local and proxy addresses are an url, including a colon and a port number</p>
+</li>
+<li>
+<p>Access to the local server is done via plain HTTP, regarless of the port</p>
+</li>
+<li>
+<p>Access to the relay server <strong>must always be via a secure TLS/HTTPS</strong> connection, regarless of the port. Checking the certificate is <strong>required</strong></p>
+</li>
+<li>
+<p>Example:</p>
+<pre lang="json"><code>    {&quot;version&quot;: &quot;1.0&quot;, &quot;local_addr&quot;: &quot;http://192.168.1.10:4653&quot;, &quot;relay_addr&quot;: &quot;https://123.456.78.900:443&quot;}
+</code></pre>
+</li>
+</ul>
+<p>From this point on, the calls below can be done to the local_addr or the relay_addr.</p>
+<p>If the client is in local mode, the API endpoint is the address given by <code>local_addr</code>. This should be the preferred mode if it's available.</p>
+<p>If the client is in remote mode, the API endpoint is the address given by <code>relay_addr</code>.</p>
+<h3>Shares</h3>
+<ul>
+<li>
+<p><code>GET /shares</code></p>
+</li>
+<li>
+<p>Lists all the shares on the HDA that are available to the logged-in user</p>
+</li>
+<li>
+<p>The return type is a json array with a list of shares, sorted alphabetically (without capitalization), with their name as a string in the <code>name</code> element, their modification time in the <code>mtime</code> element and <code>tags</code>.</p>
+</li>
+<li>
+<p>The <code>tags</code> field is a json list of tags associated to a share. The user can put arbitrary information in these fields.</p>
+</li>
+<li>
+<p>Example:</p>
+<pre lang="json"><code>[
+    { &quot;name&quot;: &quot;Books&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;books&quot; ] },
+    { &quot;name&quot;: &quot;Docs&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ ] },
+    { &quot;name&quot;: &quot;Movies&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;movies&quot; ] },
+    { &quot;name&quot;: &quot;Pictures&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;pictures&quot; ] },
+    { &quot;name&quot;: &quot;Torrents&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;movies&quot;, &quot;tv&quot; ] }
+    { &quot;name&quot;: &quot;TV&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;tv&quot; ] }
+]
+</code></pre>
+</li>
+</ul>
+<h3>Reading Files</h3>
+<ul>
+<li>
+<p><code>GET /files?s=:sharename&amp;p=:path</code></p>
+</li>
+<li>
+<p>Retrieves the file or the directory in the given share <code>:sharename</code> in the <code>s</code> parameter, with the given path <code>:path</code> in the <code>p</code> parameter</p>
+</li>
+<li>
+<p>If the requested file is a directory, this call returns its contents as an array of entries.</p>
+</li>
+<li>
+<p>The <code>name</code> element represents the name of the file or directory</p>
+</li>
+<li>
+<p>The <code>mime_type</code> element represents the expected <a href="https://en.wikipedia.org/wiki/Internet_media_type">MIME type</a> of the file based on the extension (the actual file could have some other data inside it)</p>
+</li>
+<li>
+<p>The <code>mtime</code> element is the modification time of the entry</p>
+</li>
+<li>
+<p>The <code>size</code> element contains the size of the file at the time of retrieval of the directory in bytes. It is a very large unsigned integer (uint64)</p>
+</li>
+<li>
+<p>If the entry the case of a directory entry, the <code>mime_type</code> is set to <code>text/directory</code>, and the <code>size</code> is 0</p>
+</li>
+<li>
+<p>Example for a directory entry:</p>
+<pre lang="json"><code>[
+    { &quot;name&quot;: &quot;dir&quot;, &quot;mime_type&quot;: &quot;text/directory&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 0 },
+    { &quot;name&quot;: &quot;README.txt&quot;, &quot;mime_type&quot;: &quot;text/plain&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 12345 },
+    { &quot;name&quot;: &quot;music.mp3&quot;, &quot;mime_type&quot;: &quot;audio/mpeg&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 23456 },
+    { &quot;name&quot;: &quot;image.jpg&quot;, &quot;mime_type&quot;: &quot;image/jpeg&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 34567 },
+    { &quot;name&quot;: &quot;image.png&quot;, &quot;mime_type&quot;: &quot;image/png&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 28517360 },
+    { &quot;name&quot;: &quot;movie.mkv&quot;, &quot;mime_type&quot;: &quot;video/webm&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 45678 },
+    { &quot;name&quot;: &quot;movie.mp4&quot;, &quot;mime_type&quot;: &quot;video/mp4&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 12345 }
+    { &quot;name&quot;: &quot;large.iso&quot;, &quot;mime_type&quot;: &quot;application/octet-stream&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 32839273198 }
+]
+</code></pre>
+</li>
+<li>
+<p>If the path requested is to an actual file, the file is returned via the HTTP response, with the server's best attempt at detecting the file contents procvided in the <code>Content-type</code> header</p>
+</li>
+<li>
+<p>Caching is honored for both files and directories, using the <code>Etag</code> and <code>If-None-Match</code> headers. See <strong>Caching</strong> below</p>
+</li>
+<li>
+<p>Ranges and partial file requests are also honored (see <strong>Streaming Support</strong> below)</p>
+</li>
+<li>
+<p><code>DELETE /files?s=:sharename&amp;p=:path</code></p>
+</li>
+<li>
+<p>Deletes the file or the directory in the given share <code>:sharename</code> in the <code>s</code> parameter, with the given path <code>:path</code> in the <code>p</code> parameter</p>
+</li>
+<li>
+<p>It returns a 200 code if it succeeded, else there is an error</p>
+</li>
+</ul>
+<h4>Parameters</h4>
+<ul>
+<li><strong>s</strong> is the name of the share where the file is located</li>
+<li>It must be URL-encoded and the share must exist</li>
+<li><strong>p</strong> is the path to a file or directory, relative from the root directory</li>
+<li>It must be URL-encoded.</li>
+<li>The path must start with %2f (the URL encoding for /).</li>
+<li>If no path is given, the file system root directory is returned.</li>
+</ul>
+<h4>Errors</h4>
+<ul>
+<li>If the share does not exist, a <code>400 Bad Request</code> is returned.</li>
+<li>If the path cannot be found, a <code>404 Not Found</code> HTTP error is returned.</li>
+<li>If the path is to a directory, a json representation of all the files and directories therein is returned.</li>
+<li>If the path has invalid characters or is not properly escaped, a <code>400 Bad Request</code> is returned.</li>
+<li>Finally, if error occurs in the remote end, a <code>502 Bad Gateway</code> error is returned.</li>
+</ul>
+<h3>Deleting Files</h3>
+<ul>
+<li><code>DELETE /files?s=:sharename&amp;p=:path</code></li>
+<li>Deletes the file or the directory in the given share <code>:sharename</code> in the <code>s</code> parameter, with the given path <code>:path</code> in the <code>p</code> parameter</li>
+<li>It returns a 200 code if it succeeded, else there is an error</li>
+</ul>
+<h4>Parameters</h4>
+<p>Same parameter as in reading a file, a share and a path to the file.</p>
+<h4>Errors</h4>
+<p>Same errors as in reading files, and in addition:</p>
+<ul>
+<li>If deletion of the file or folder fails, <code>417 Expectation Failed</code> is returned.</li>
+</ul>
+<h2>Identifying Content</h2>
+<hr />
+<p>The client will identify the content of the documents being retrieved based on the following:</p>
+<ul>
+<li>For actual files, the <code>Content-Type</code> header</li>
+<li>For directories, each file has a <code>mime_type</code> value for it</li>
+</ul>
+<h2>Streaming Support</h2>
+<hr />
+<p>It's critical to be able to support streaming so that large files can be played over the network easily.</p>
+<p>The server supports the <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.7">range header</a> for partial retrieval of content.</p>
+<p>Other possibilities not supported yet:</p>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Chunked_transfer_encoding">Chunked transfer encoding header</a></li>
+</ul>
+<h2>Autodetection of Local vs. Remote</h2>
+<hr />
+<p>Autodetection is done by simply doing a <code>/shares</code> call to the <code>local_addr</code> endpoint and verifying that the result is both <code>200 OK</code> and that the data is a proper JSON array.</p>
+<p>For technical reasons, DNS cannot be use for this type of autodetection.</p>
+<h2>Caching</h2>
+<hr />
+<p>The server supports the <code>ETag</code> scheme for caching.</p>
+<p>The client ought to make use of the HTTP freshness headers whenever possible, to lower the load on the back-end servers (and increase the speed of the application).</p>
+<p>All requests for directories and files should include an <code>ETag</code> or <code>Last-Modified</code> header. When the client first requests a resource, it should store this value for future use. On subsequent requests, the client submits requests with <code>If-None-Match</code> and <code>If-Modified-Since</code> headers based on the stored information. If the resource hasn't changed, the client will see a <code>304 Not Modified</code> response, which saves time, CPU and bandwidth most of the time.</p>
+<h2>Redirection</h2>
+<hr />
+<p>The client will probably have to support for redirection in the future, as a possible result of some calls. This is to provide a more efficient operation. It's not required at this time.</p>
+<h2>Error Handling</h2>
+<hr />
+<p>If the server cannot contact the origin server, it will issue a <code>408 Request Timeout</code>. This can be taken as an indication that the origin HDA is not connected or reachable.</p>
+<p>If the server is having trouble, you might see a 5xx error from calls. <code>500</code> means that the app is down. It's the client's responsibility in all cases of 5xx errors to handle it properly towards the user and allow her to retry the requests later.</p>
+<h1>License</h1>
+<p>This spec of the Amahi Anywhere protocol is open source, released under the GPL v3 license.</p>
+<p>This means that this protocol is open, as invented by Amahi in 2013 and subsequent modifications.</p>
+<p>This section explicitly states all that you may do with the protocol.</p>
+<p>The specifications are fully open to the public to be used for any purpose (the Amahi project reserves the right to set the Amahi Anywhere specification and certify compliance). They are free for commercial or noncommercial use. That means that commercial developers may independently write Amahi Anywhere software which is compatible with the specifications for no charge and without restrictions of any kind. There are no licensing fees or royalties of any kind for use of the protocol or its specifications, or for distributing, selling, or applications using the Amahi Anywhere formats/protocols.</p>
+<p>The Amahi project also makes available software that implements the formats, which is distributed according to Open Source licenses as described in their sources.</p>
+<p>The Amahi Anywhere protocol/formats nor any of the implemented formatting methods are covered by any known patent.</p>
+<p>Amahi Anywhere is one of a family of protocols and software of the Amahi project, all created according to the same free ideals.</p>
+<p>If you would like to redistribute parts or all of Amahi Anywhere under different terms, contact the Amahi support line.</p>
+<p>(C) 2014-2018, Amahi</p>
