@@ -1,4 +1,4 @@
-Amahi Anywhere Client API Specification - v0.12
+Amahi Anywhere Client API Specification - v0.13
 ===============================================
 
 The Amahi Anywhere Clients use a REST HTTP protocol for browsing, downloading and streaming files and more.
