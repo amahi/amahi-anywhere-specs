@@ -157,10 +157,10 @@ To authenticate, the client app has to issue a `POST` to `/auth` with an `applic
 `POST /auth`
   ```json
     {
-      "pin": 1234
+      "pin": "1234"
     }
   ```
-The pin must be numeric and not string.
+The pin must be string and not numeric.
 
 On successful authentication, a 200 OK response will be sent by the server.
   ```json

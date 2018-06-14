@@ -167,10 +167,10 @@ User-Agent: AmahiAnywhere/1.0 (Android 4.2.2)
 <p>To authenticate, the client app has to issue a <code>POST</code> to <code>/auth</code> with an <code>application/json</code> content-type body containing the following in it:</p>
 <p><code>POST /auth</code></p>
 <pre lang="json"><code>  {
-    &quot;pin&quot;: 1234
+    &quot;pin&quot;: &quot;1234&quot;
   }
 </code></pre>
-<p>The pin must be numeric and not string.</p>
+<p>The pin must be string and not numeric.</p>
 <p>On successful authentication, a 200 OK response will be sent by the server.</p>
 <pre lang="json"><code>  {
     &quot;auth_token&quot;: &quot;51e3088a2da8f1c8b9285f0fae25b95c&quot;
