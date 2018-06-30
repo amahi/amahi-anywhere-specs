@@ -154,22 +154,31 @@ Since different users can have different access permissions on HDA so each user 
 
 To authenticate, the client app has to issue a `POST` to `/auth` with an `application/json` content-type body containing the following in it:
 
-`POST /auth`
-  ```json
-    {
-      "pin": "1234"
-    }
-  ```
-The pin must be string and not numeric.
+* `POST /auth`
+    ```json
+      {
+        "pin": "1234"
+      }
+    ```
+  * The pin must be string and not numeric.
 
-On successful authentication, a 200 OK response will be sent by the server.
-  ```json
-    {
-      "auth_token": "51e3088a2da8f1c8b9285f0fae25b95c"
-    }
-  ```
-This auth_token must be sent in `Authorization` header for `/shares` and `/files` request.
-On unsuccessful authentication, server will respond with 401 Unauthorized. 
+* On successful authentication, a 200 OK response will be sent by the server.
+    ```json
+      {
+        "auth_token": "51e3088a2da8f1c8b9285f0fae25b95c"
+      }
+    ```
+  * This auth_token must be sent in `Authorization` header for `/shares`, `/files` and `/logout` requests.
+* On unsuccessful authentication, server will respond with 401 Unauthorized. 
+
+### HDA User Logout
+
+* `POST /logout`
+* Logs out the user whose auth_token has been provided and removes its session
+* It will return a 200 OK response on successful logout
+
+#### Headers
+* **Authorization** the `auth_token` must be sent here.
 
 ### Shares
 

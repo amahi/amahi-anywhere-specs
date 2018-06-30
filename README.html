@@ -165,19 +165,41 @@ User-Agent: AmahiAnywhere/1.0 (Android 4.2.2)
 <h3>HDA User Authentication</h3>
 <p>Since different users can have different access permissions on HDA so each user must identify himself/herself to the HDA. In order to do that the app must request a PIN from the user. This PIN can be sent to the HDA either directly or via Proxy.</p>
 <p>To authenticate, the client app has to issue a <code>POST</code> to <code>/auth</code> with an <code>application/json</code> content-type body containing the following in it:</p>
+<ul>
+<li>
 <p><code>POST /auth</code></p>
 <pre lang="json"><code>  {
     &quot;pin&quot;: &quot;1234&quot;
   }
 </code></pre>
-<p>The pin must be string and not numeric.</p>
+<ul>
+<li>The pin must be string and not numeric.</li>
+</ul>
+</li>
+<li>
 <p>On successful authentication, a 200 OK response will be sent by the server.</p>
 <pre lang="json"><code>  {
     &quot;auth_token&quot;: &quot;51e3088a2da8f1c8b9285f0fae25b95c&quot;
   }
 </code></pre>
-<p>This auth_token must be sent in <code>Authorization</code> header for <code>/shares</code> and <code>/files</code> request.
-On unsuccessful authentication, server will respond with 401 Unauthorized.</p>
+<ul>
+<li>This auth_token must be sent in <code>Authorization</code> header for <code>/shares</code>, <code>/files</code> and <code>/logout</code> requests.</li>
+</ul>
+</li>
+<li>
+<p>On unsuccessful authentication, server will respond with 401 Unauthorized.</p>
+</li>
+</ul>
+<h3>HDA User Logout</h3>
+<ul>
+<li><code>POST /logout</code></li>
+<li>Logs out the user whose auth_token has been provided and removes its session</li>
+<li>It will return a 200 OK response on successful logout</li>
+</ul>
+<h4>Headers</h4>
+<ul>
+<li><strong>Authorization</strong> the <code>auth_token</code> must be sent here.</li>
+</ul>
 <h3>Shares</h3>
 <ul>
 <li>
