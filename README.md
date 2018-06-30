@@ -160,22 +160,22 @@ To authenticate, the client app has to issue a `POST` to `/auth` with an `applic
         "pin": "1234"
       }
     ```
-  * The pin must be string and not numeric.
+  * The PIN must be 3 to 5 characters and must match `[A-Za-z0-9]+`.
 
-* On successful authentication, a 200 OK response will be sent by the server.
+* On successful authentication, a `200 OK` response will be sent by the server.
     ```json
       {
         "auth_token": "51e3088a2da8f1c8b9285f0fae25b95c"
       }
     ```
   * This auth_token must be sent in `Authorization` header for `/shares`, `/files` and `/logout` requests.
-* On unsuccessful authentication, server will respond with 401 Unauthorized. 
+* On unsuccessful authentication, server will respond with `401 Unauthorized`. 
 
 ### HDA User Logout
 
 * `POST /logout`
 * Logs out the user whose auth_token has been provided and removes its session
-* It will return a 200 OK response on successful logout
+* It will return a `200 OK` response on successful logout
 
 #### Headers
 * **Authorization** the `auth_token` must be sent here.

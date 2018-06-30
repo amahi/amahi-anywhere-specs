@@ -173,11 +173,11 @@ User-Agent: AmahiAnywhere/1.0 (Android 4.2.2)
   }
 </code></pre>
 <ul>
-<li>The pin must be string and not numeric.</li>
+<li>The PIN must be 3 to 5 characters and must match <code>[A-Za-z0-9]+</code>.</li>
 </ul>
 </li>
 <li>
-<p>On successful authentication, a 200 OK response will be sent by the server.</p>
+<p>On successful authentication, a <code>200 OK</code> response will be sent by the server.</p>
 <pre lang="json"><code>  {
     &quot;auth_token&quot;: &quot;51e3088a2da8f1c8b9285f0fae25b95c&quot;
   }
@@ -187,14 +187,14 @@ User-Agent: AmahiAnywhere/1.0 (Android 4.2.2)
 </ul>
 </li>
 <li>
-<p>On unsuccessful authentication, server will respond with 401 Unauthorized.</p>
+<p>On unsuccessful authentication, server will respond with <code>401 Unauthorized</code>.</p>
 </li>
 </ul>
 <h3>HDA User Logout</h3>
 <ul>
 <li><code>POST /logout</code></li>
 <li>Logs out the user whose auth_token has been provided and removes its session</li>
-<li>It will return a 200 OK response on successful logout</li>
+<li>It will return a <code>200 OK</code> response on successful logout</li>
 </ul>
 <h4>Headers</h4>
 <ul>
