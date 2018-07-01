@@ -1,4 +1,4 @@
-Amahi Anywhere Client API Specification - v0.12
+Amahi Anywhere Client API Specification - v0.13
 ===============================================
 
 The Amahi Anywhere Clients use a REST HTTP protocol for browsing, downloading and streaming files and more.
@@ -20,12 +20,13 @@ Through this document we will have the following API endpoints. The interaction 
 
 Example of a typical sequence of accesses:
 
-1) Authenticate the user against the Amahi API endpoint
+1) Authenticate the amahi user against the Amahi API endpoint
 2) GET /servers (this gives a session token to use for each server)
-3) GET /shares will return the visible shares on a given server (with the session for that server)
-4) GET /files?s=SomeShare&p=/som/path/or/file.png to get a directory or a file from a server (with the proper session key)
+3) POST /auth expects JSON type data with pin key in request body and returns auth token for that hda user
+4) GET /shares will return the visible shares on a given server (with the session for that server)
+5) GET /files?s=SomeShare&p=/som/path/or/file.png to get a directory or a file from a server (with the proper session key)
 
-The user navigates their files by repeating calls like 4 above with different share names and paths.
+The user navigates through their files by repeating calls like 5 above with different share names and paths.
 
 ## Authentication
 -----------------
@@ -82,18 +83,18 @@ After authenticating in the user, the client should log the user in. Then it nee
       ```json
 		[
 			{
-				"name" = "server1",
-				"active" = 1,
-				"session" = "6337fc16d9b31049e3137bb8fc74b86e6b4cb35c",
-				"ip_addr" = "1.2.3.4",
-				"fqdn" = "server1.yourhda.com"
+				"name": "server1",
+				"active": 1,
+				"session": "6337fc16d9b31049e3137bb8fc74b86e6b4cb35c",
+				"ip_addr": "1.2.3.4",
+				"fqdn": "server1.yourhda.com"
 			},
 			{
-				"name" = "server2",
-				"active" = 0,
-				"session" = "",
-				"ip_addr" = "",
-				"fqdn" = ""
+				"name": "server2",
+				"active": 0,
+				"session": "",
+				"ip_addr": "",
+				"fqdn": ""
 			}
 		]
       ```
@@ -147,22 +148,55 @@ If the client is in local mode, the API endpoint is the address given by `local_
 
 If the client is in remote mode, the API endpoint is the address given by `relay_addr`.
 
+### HDA User Authentication
+
+Since different users can have different access permissions on HDA so each user must identify himself/herself to the HDA. In order to do that the app must request a PIN from the user. This PIN can be sent to the HDA either directly or via Proxy.
+
+To authenticate, the client app has to issue a `POST` to `/auth` with an `application/json` content-type body containing the following in it:
+
+* `POST /auth`
+    ```json
+      {
+        "pin": "1234"
+      }
+    ```
+  * The PIN must be 3 to 5 characters and must match `[A-Za-z0-9]+`.
+
+* On successful authentication, a `200 OK` response will be sent by the server.
+    ```json
+      {
+        "auth_token": "51e3088a2da8f1c8b9285f0fae25b95c"
+      }
+    ```
+  * This auth_token must be sent in `Authorization` header for `/shares`, `/files` and `/logout` requests.
+* On unsuccessful authentication, server will respond with `401 Unauthorized`. 
+
+### HDA User Logout
+
+* `POST /logout`
+* Logs out the user whose auth_token has been provided and removes its session
+* It will return a `200 OK` response on successful logout
+
+#### Headers
+* **Authorization** the `auth_token` must be sent here.
+
 ### Shares
 
 * `GET /shares`
  * Lists all the shares on the HDA that are available to the logged-in user
  * The return type is a json array with a list of shares, sorted alphabetically (without capitalization), with their name as a string in the `name` element, their modification time in the `mtime` element and `tags`.
  * The `tags` field is a json list of tags associated to a share. The user can put arbitrary information in these fields.
+ * The `writable` field denotes if that share is writable or not for the logged-in user. Client app must appropriately display/hide the Upload or Delete button as per the value of writable field for a given share.  
  * Example:
 
       ```json
       [
-          { "name": "Books", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "tags": [ "books" ] },
-          { "name": "Docs", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "tags": [ ] },
-          { "name": "Movies", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "tags": [ "movies" ] },
-          { "name": "Pictures", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "tags": [ "pictures" ] },
-          { "name": "Torrents", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "tags": [ "movies", "tv" ] }
-          { "name": "TV", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "tags": [ "tv" ] }
+          { "name": "Books", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "tags": [ "books" ], "writable": false },
+          { "name": "Docs", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "tags": [ ], "writable": true },
+          { "name": "Movies", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "tags": [ "movies" ], "writable": false },
+          { "name": "Pictures", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "tags": [ "pictures" ], "writable": false },
+          { "name": "Torrents", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "tags": [ "movies", "tv" ], "writable": false }
+          { "name": "TV", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "tags": [ "tv" ], "writable": true }
       ]
       ```
 
@@ -199,6 +233,9 @@ If the client is in remote mode, the API endpoint is the address given by `relay
  * Deletes the file or the directory in the given share `:sharename` in the `s` parameter, with the given path `:path` in the `p` parameter
  * It returns a 200 code if it succeeded, else there is an error
 
+#### Headers
+* **Authorization** the `auth_token` must be sent here.
+
 #### Parameters
 * **s** is the name of the share where the file is located
  * It must be URL-encoded and the share must exist
@@ -208,6 +245,7 @@ If the client is in remote mode, the API endpoint is the address given by `relay
  * If no path is given, the file system root directory is returned.
 
 #### Errors
+ * If the `Authorization` header is not supplied or is wrong, a `403 Forbidden` is returned.
  * If the share does not exist, a `400 Bad Request` is returned.
  * If the path cannot be found, a `404 Not Found` HTTP error is returned.
  * If the path is to a directory, a json representation of all the files and directories therein is returned.
@@ -219,6 +257,9 @@ If the client is in remote mode, the API endpoint is the address given by `relay
  * `DELETE /files?s=:sharename&p=:path`
   * Deletes the file or the directory in the given share `:sharename` in the `s` parameter, with the given path `:path` in the `p` parameter
   * It returns a 200 code if it succeeded, else there is an error
+
+#### Headers
+* **Authorization** the `auth_token` must be sent here.
 
 #### Parameters
 Same parameter as in reading a file, a share and a path to the file.

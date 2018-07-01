@@ -24,7 +24,7 @@ pre code {
   background-color: #f8fafc;
 }
 </style>
-<h1>Amahi Anywhere Client API Specification - v0.12</h1>
+<h1>Amahi Anywhere Client API Specification - v0.13</h1>
 <p>The Amahi Anywhere Clients use a REST HTTP protocol for browsing, downloading and streaming files and more.</p>
 <p>The clients can be in local mode (known as &quot;LAN&quot; or &quot;LAN Access&quot; to the user), or remote mode (known as &quot;Remote&quot;). Internally we just call them local or remote. The client can perform streaming and the rest of the functions much faster when using the local mode, being inside the user's LAN, so that should be the favored mode, when available. The client should test for local mode availability dynamically, but only when the user is interacting with the app, <em>never</em> in the background, as this will be costly in terms of battery.</p>
 <h2>API Endpoints</h2>
@@ -42,12 +42,13 @@ pre code {
 <p><img src="API-interaction.png" alt="API Interaction Diagram" /></p>
 <p>Example of a typical sequence of accesses:</p>
 <ol>
-<li>Authenticate the user against the Amahi API endpoint</li>
+<li>Authenticate the amahi user against the Amahi API endpoint</li>
 <li>GET /servers (this gives a session token to use for each server)</li>
+<li>POST /auth expects JSON type data with pin key in request body and returns auth token for that hda user</li>
 <li>GET /shares will return the visible shares on a given server (with the session for that server)</li>
 <li>GET /files?s=SomeShare&amp;p=/som/path/or/file.png to get a directory or a file from a server (with the proper session key)</li>
 </ol>
-<p>The user navigates their files by repeating calls like 4 above with different share names and paths.</p>
+<p>The user navigates through their files by repeating calls like 5 above with different share names and paths.</p>
 <h2>Authentication</h2>
 <hr />
 <p>The app must collect 1) a username/email and 2) a password, from the user and authenticate this information against Amahi's servers using the <a href="http://oauth.net/">OAuth 2 protocol</a> with the <em>Amahi API</em> endpoint.</p>
@@ -100,18 +101,18 @@ username=USERNAME
 <p>Example:</p>
 <pre lang="json"><code>  [
   	{
-  		&quot;name&quot; = &quot;server1&quot;,
-  		&quot;active&quot; = 1,
-  		&quot;session&quot; = &quot;6337fc16d9b31049e3137bb8fc74b86e6b4cb35c&quot;,
-  		&quot;ip_addr&quot; = &quot;1.2.3.4&quot;,
-  		&quot;fqdn&quot; = &quot;server1.yourhda.com&quot;
+  		&quot;name&quot;: &quot;server1&quot;,
+  		&quot;active&quot;: 1,
+  		&quot;session&quot;: &quot;6337fc16d9b31049e3137bb8fc74b86e6b4cb35c&quot;,
+  		&quot;ip_addr&quot;: &quot;1.2.3.4&quot;,
+  		&quot;fqdn&quot;: &quot;server1.yourhda.com&quot;
   	},
   	{
-  		&quot;name&quot; = &quot;server2&quot;,
-  		&quot;active&quot; = 0,
-  		&quot;session&quot; = &quot;&quot;,
-  		&quot;ip_addr&quot; = &quot;&quot;,
-  		&quot;fqdn&quot; = &quot;&quot;
+  		&quot;name&quot;: &quot;server2&quot;,
+  		&quot;active&quot;: 0,
+  		&quot;session&quot;: &quot;&quot;,
+  		&quot;ip_addr&quot;: &quot;&quot;,
+  		&quot;fqdn&quot;: &quot;&quot;
   	}
   ]
 </code></pre>
@@ -161,6 +162,44 @@ User-Agent: AmahiAnywhere/1.0 (Android 4.2.2)
 <p>From this point on, the calls below can be done to the local_addr or the relay_addr.</p>
 <p>If the client is in local mode, the API endpoint is the address given by <code>local_addr</code>. This should be the preferred mode if it's available.</p>
 <p>If the client is in remote mode, the API endpoint is the address given by <code>relay_addr</code>.</p>
+<h3>HDA User Authentication</h3>
+<p>Since different users can have different access permissions on HDA so each user must identify himself/herself to the HDA. In order to do that the app must request a PIN from the user. This PIN can be sent to the HDA either directly or via Proxy.</p>
+<p>To authenticate, the client app has to issue a <code>POST</code> to <code>/auth</code> with an <code>application/json</code> content-type body containing the following in it:</p>
+<ul>
+<li>
+<p><code>POST /auth</code></p>
+<pre lang="json"><code>  {
+    &quot;pin&quot;: &quot;1234&quot;
+  }
+</code></pre>
+<ul>
+<li>The PIN must be 3 to 5 characters and must match <code>[A-Za-z0-9]+</code>.</li>
+</ul>
+</li>
+<li>
+<p>On successful authentication, a <code>200 OK</code> response will be sent by the server.</p>
+<pre lang="json"><code>  {
+    &quot;auth_token&quot;: &quot;51e3088a2da8f1c8b9285f0fae25b95c&quot;
+  }
+</code></pre>
+<ul>
+<li>This auth_token must be sent in <code>Authorization</code> header for <code>/shares</code>, <code>/files</code> and <code>/logout</code> requests.</li>
+</ul>
+</li>
+<li>
+<p>On unsuccessful authentication, server will respond with <code>401 Unauthorized</code>.</p>
+</li>
+</ul>
+<h3>HDA User Logout</h3>
+<ul>
+<li><code>POST /logout</code></li>
+<li>Logs out the user whose auth_token has been provided and removes its session</li>
+<li>It will return a <code>200 OK</code> response on successful logout</li>
+</ul>
+<h4>Headers</h4>
+<ul>
+<li><strong>Authorization</strong> the <code>auth_token</code> must be sent here.</li>
+</ul>
 <h3>Shares</h3>
 <ul>
 <li>
@@ -176,14 +215,17 @@ User-Agent: AmahiAnywhere/1.0 (Android 4.2.2)
 <p>The <code>tags</code> field is a json list of tags associated to a share. The user can put arbitrary information in these fields.</p>
 </li>
 <li>
+<p>The <code>writable</code> field denotes if that share is writable or not for the logged-in user. Client app must appropriately display/hide the Upload or Delete button as per the value of writable field for a given share.</p>
+</li>
+<li>
 <p>Example:</p>
 <pre lang="json"><code>[
-    { &quot;name&quot;: &quot;Books&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;books&quot; ] },
-    { &quot;name&quot;: &quot;Docs&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ ] },
-    { &quot;name&quot;: &quot;Movies&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;movies&quot; ] },
-    { &quot;name&quot;: &quot;Pictures&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;pictures&quot; ] },
-    { &quot;name&quot;: &quot;Torrents&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;movies&quot;, &quot;tv&quot; ] }
-    { &quot;name&quot;: &quot;TV&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;tv&quot; ] }
+    { &quot;name&quot;: &quot;Books&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;books&quot; ], &quot;writable&quot;: false },
+    { &quot;name&quot;: &quot;Docs&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ ], &quot;writable&quot;: true },
+    { &quot;name&quot;: &quot;Movies&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;movies&quot; ], &quot;writable&quot;: false },
+    { &quot;name&quot;: &quot;Pictures&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;pictures&quot; ], &quot;writable&quot;: false },
+    { &quot;name&quot;: &quot;Torrents&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;movies&quot;, &quot;tv&quot; ], &quot;writable&quot;: false }
+    { &quot;name&quot;: &quot;TV&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;tv&quot; ], &quot;writable&quot;: true }
 ]
 </code></pre>
 </li>
@@ -247,6 +289,10 @@ User-Agent: AmahiAnywhere/1.0 (Android 4.2.2)
 <p>It returns a 200 code if it succeeded, else there is an error</p>
 </li>
 </ul>
+<h4>Headers</h4>
+<ul>
+<li><strong>Authorization</strong> the <code>auth_token</code> must be sent here.</li>
+</ul>
 <h4>Parameters</h4>
 <ul>
 <li><strong>s</strong> is the name of the share where the file is located</li>
@@ -258,6 +304,7 @@ User-Agent: AmahiAnywhere/1.0 (Android 4.2.2)
 </ul>
 <h4>Errors</h4>
 <ul>
+<li>If the <code>Authorization</code> header is not supplied or is wrong, a <code>403 Forbidden</code> is returned.</li>
 <li>If the share does not exist, a <code>400 Bad Request</code> is returned.</li>
 <li>If the path cannot be found, a <code>404 Not Found</code> HTTP error is returned.</li>
 <li>If the path is to a directory, a json representation of all the files and directories therein is returned.</li>
@@ -269,6 +316,10 @@ User-Agent: AmahiAnywhere/1.0 (Android 4.2.2)
 <li><code>DELETE /files?s=:sharename&amp;p=:path</code></li>
 <li>Deletes the file or the directory in the given share <code>:sharename</code> in the <code>s</code> parameter, with the given path <code>:path</code> in the <code>p</code> parameter</li>
 <li>It returns a 200 code if it succeeded, else there is an error</li>
+</ul>
+<h4>Headers</h4>
+<ul>
+<li><strong>Authorization</strong> the <code>auth_token</code> must be sent here.</li>
 </ul>
 <h4>Parameters</h4>
 <p>Same parameter as in reading a file, a share and a path to the file.</p>
