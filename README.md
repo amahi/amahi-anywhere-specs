@@ -252,6 +252,17 @@ To authenticate, the client app has to issue a `POST` to `/auth` with an `applic
  * If the path has invalid characters or is not properly escaped, a `400 Bad Request` is returned.
  * Finally, if error occurs in the remote end, a ``502 Bad Gateway`` error is returned.
 
+### Uploading Files
+
+* `POST /files?s=:sharename&p=:path`
+ * Upload the file in the given share `:sharename` in the `s` parameter, with the given path `:path` in the `p` parameter
+ * Post the data as `multipart/form-data` encoded with file as `file` field.
+ * Following status codes can be expected:
+    * 200: if the file is uploaded successfully
+    * 412: if the posted data is not correctly encoded
+    * 415: if the file name is invalid
+    * 417: if `file` field in form is emtpy
+
 ### Deleting Files
 
  * `DELETE /files?s=:sharename&p=:path`
