@@ -277,7 +277,8 @@ Same errors as in reading files, and in addition:
 
 `GET /cache?s=:sharename&p=:path`
  * Retrieves the thumbnail for a file in the given share `:sharename` in the `s` parameter, with the given path `:path` in the `p` parameter
- * As mentioned in [`Reading Files`](#reading-files), endpoint for thumbnail looks like is returned by server if it is present.
+ * As mentioned in [`Reading Files`](#reading-files), endpoint for thumbnail is returned by server if it is present.
+ * It returns status code 200 and the file content if thumbnail is found else, code 404 returned.
 
 
 ## Identifying Content
