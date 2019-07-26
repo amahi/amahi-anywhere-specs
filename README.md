@@ -200,7 +200,7 @@ To authenticate, the client app has to issue a `POST` to `/auth` with an `applic
       ]
       ```
 
-### Reading Files
+### <a name="reading-files">Reading Files</a>
 
 * `GET /files?s=:sharename&p=:path`
  * Retrieves the file or the directory in the given share `:sharename` in the `s` parameter, with the given path `:path` in the `p` parameter
@@ -209,19 +209,24 @@ To authenticate, the client app has to issue a `POST` to `/auth` with an `applic
   * The `mime_type` element represents the expected [MIME type](https://en.wikipedia.org/wiki/Internet_media_type) of the file based on the extension (the actual file could have some other data inside it)
   * The `mtime` element is the modification time of the entry
   * The `size` element contains the size of the file at the time of retrieval of the directory in bytes. It is a very large unsigned integer (uint64)
-  * If the entry the case of a directory entry, the `mime_type` is set to `text/directory`, and the `size` is 0
+  * The `cache` element contains the details about the thumbnail cache for any image file. It is a json object with the following fields:
+    * The `status` element is a boolean field. If `false`, no other field in `cache` is present, and if `true` the remaining fields represents the details about the thumbnail.
+    * The `mtime` element is the modification time of the entry
+    * The `size` element contains the size of the file
+    * The `endpoint` element contains endpoint for the thumbnail cache. It is essentially of the form: `/cache?s=<sharename>&p=<file-path>`
+  * If the entry the case of a directory entry, the `mime_type` is set to `text/directory`, the `size` is 0, and `status` for `cache` is `false`
  * Example for a directory entry:
 
       ```json
       [
-          { "name": "dir", "mime_type": "text/directory", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 0 },
-          { "name": "README.txt", "mime_type": "text/plain", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 12345 },
-          { "name": "music.mp3", "mime_type": "audio/mpeg", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 23456 },
-          { "name": "image.jpg", "mime_type": "image/jpeg", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 34567 },
-          { "name": "image.png", "mime_type": "image/png", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 28517360 },
-          { "name": "movie.mkv", "mime_type": "video/webm", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 45678 },
-          { "name": "movie.mp4", "mime_type": "video/mp4", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 12345 }
-          { "name": "large.iso", "mime_type": "application/octet-stream", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 32839273198 }
+          { "name": "dir", "mime_type": "text/directory", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 0, "cache": {"status": false} },
+          { "name": "README.txt", "mime_type": "text/plain", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 12345, "cache": {"status": false} },
+          { "name": "music.mp3", "mime_type": "audio/mpeg", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 23456, "cache": {"status": false} },
+          { "name": "image.jpg", "mime_type": "image/jpeg", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 34567, , "cache": {"status": true, "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 4567, "endpoint": "/cache?s=<sharename>&p=<file-path>"} },
+          { "name": "image.png", "mime_type": "image/png", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 28517360, "cache": {"status": true, "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 9360, "endpoint": "/cache?s=<sharename>&p=<file-path>"} },
+          { "name": "movie.mkv", "mime_type": "video/webm", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 45678, "cache": {"status": false} },
+          { "name": "movie.mp4", "mime_type": "video/mp4", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 12345, "cache": {"status": false} },
+          { "name": "large.iso", "mime_type": "application/octet-stream", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 32839273198, "cache": {"status": false} }
       ]
       ```
 
@@ -267,6 +272,14 @@ Same parameter as in reading a file, a share and a path to the file.
 #### Errors
 Same errors as in reading files, and in addition:
  * If deletion of the file or folder fails, `417 Expectation Failed` is returned.
+
+### Getting Thumbnails
+
+`GET /cache?s=:sharename&p=:path`
+ * Retrieves the thumbnail for a file in the given share `:sharename` in the `s` parameter, with the given path `:path` in the `p` parameter
+ * As mentioned in [`Reading Files`](#reading-files), endpoint for thumbnail is returned by server if it is present.
+ * It returns status code 200 and the file content if thumbnail is found else, code 404 returned.
+
 
 ## Identifying Content
 ----------------------
