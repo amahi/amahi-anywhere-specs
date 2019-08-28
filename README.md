@@ -28,7 +28,7 @@ Example of a typical sequence of accesses:
 
 The user navigates through their files by repeating calls like 5 above with different share names and paths.
 
-## Authentication
+Authentication
 -----------------
 
 The app must collect 1) a username/email and 2) a password, from the user and authenticate this information against Amahi's servers using the [OAuth 2 protocol](http://oauth.net/) with the *Amahi API* endpoint.
@@ -65,7 +65,7 @@ Subsequent calls to the main auth server will have to have the `acces_token` ret
 GET /api2/servers?access_token=d78abb0542736865f94704521609c230dac03a2f369d043ac212d6933b91410e
 ```
 
-## Initial request for Amahi servers
+Initial request for Amahi servers
 ------------------------------------
 
 After authenticating in the user, the client should log the user in. Then it needs to request the Amahi API back-end what servers the user has, also using the *Amahi API* endpoint. The format of the call is:
@@ -99,7 +99,7 @@ After authenticating in the user, the client should log the user in. Then it nee
 		]
       ```
 
-## Identifying the client to API endpoints
+Identifying the client to API endpoints
 ------------------------------------------
 
 For all calls, the client must include a `User-Agent` header with its details so that we can support version-specific work-arounds. Here's what's typical for a user agent:
@@ -115,7 +115,7 @@ Examples:
 
 Failure to send this header will result in a `400 Bad Request` error. We plan to enforce these
 
-## Resources on a server
+Resources on a server
 ------------------------
 
 ### Timestamps
@@ -210,18 +210,24 @@ To authenticate, the client app has to issue a `POST` to `/auth` with an `applic
   * The `mtime` element is the modification time of the entry
   * The `size` element contains the size of the file at the time of retrieval of the directory in bytes. It is a very large unsigned integer (uint64)
   * If the entry the case of a directory entry, the `mime_type` is set to `text/directory`, and the `size` is 0
+  * The `cache` element contains the details about the thumbnail cache for any media file. It is a json object with the following fields:
+    * The `status` element is a boolean field. If `false`, no other field in `cache` is present, and if `true` the remaining fields represents the details about the thumbnail.
+    * The `mtime` element is the modification time of the entry
+    * The `size` element contains the size of the file
+    * The `endpoint` element contains endpoint for the thumbnail cache. It is essentially of the form: `/cache?s=<sharename>&p=<file-path>`
+  * If the entry the case of a directory entry, the `mime_type` is set to `text/directory`, the `size` is 0, and `status` for `cache` is `false`
  * Example for a directory entry:
 
       ```json
       [
-          { "name": "dir", "mime_type": "text/directory", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 0 },
-          { "name": "README.txt", "mime_type": "text/plain", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 12345 },
-          { "name": "music.mp3", "mime_type": "audio/mpeg", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 23456 },
-          { "name": "image.jpg", "mime_type": "image/jpeg", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 34567 },
-          { "name": "image.png", "mime_type": "image/png", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 28517360 },
-          { "name": "movie.mkv", "mime_type": "video/webm", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 45678 },
-          { "name": "movie.mp4", "mime_type": "video/mp4", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 12345 }
-          { "name": "large.iso", "mime_type": "application/octet-stream", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 32839273198 }
+          { "name": "dir", "mime_type": "text/directory", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 0, "cache": {"status": false} },
+          { "name": "README.txt", "mime_type": "text/plain", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 12345, "cache": {"status": false} },
+          { "name": "music.mp3", "mime_type": "audio/mpeg", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 23456, "cache": {"status": true, "mtime": "Wed, 28 Aug 2019 12:48:38 GMT", "size": 42532, "endpoint": "/cache?s=<sharename>&p=<file-path>"} },
+          { "name": "image.jpg", "mime_type": "image/jpeg", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 34567, , "cache": {"status": true, "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 4567, "endpoint": "/cache?s=<sharename>&p=<file-path>"} },
+          { "name": "image.png", "mime_type": "image/png", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 28517360, "cache": {"status": true, "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 9360, "endpoint": "/cache?s=<sharename>&p=<file-path>"} },
+          { "name": "movie.mkv", "mime_type": "video/webm", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 45678, "cache": {"status": false} },
+          { "name": "movie.mp4", "mime_type": "video/mp4", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 12345, "cache": {"status": false} },
+          { "name": "large.iso", "mime_type": "application/octet-stream", "mtime": "Sat, 17 Aug 2013 02:38:32 GMT", "size": 32839273198, "cache": {"status": false} }
       ]
       ```
 
@@ -268,7 +274,52 @@ Same parameter as in reading a file, a share and a path to the file.
 Same errors as in reading files, and in addition:
  * If deletion of the file or folder fails, `417 Expectation Failed` is returned.
 
-## Identifying Content
+### Getting Thumbnails
+
+`GET /cache?s=:sharename&p=:path`
+ * Retrieves the thumbnail for a file in the given share `:sharename` in the `s` parameter, with the given path `:path` in the `p` parameter
+ * As mentioned in [`Reading Files`](#reading-files), endpoint for thumbnail is returned by server if it is present.
+ * It returns status code 200 and the file content if thumbnail is found else, code 404 returned.
+
+### <a name="metadata">Fetching Metadata</a>
+
+* `GET /meta?s=:sharename&p=:path`
+ * Fetches the metadata for mediafile in the given share `:sharename` in the `s` parameter, with the given path `:path` in the `p` parameter
+ * 2 types of responses can be expected: 
+   * `404 Not Found`: If the requested file is a directory or the metadata to the file is unavailable.
+   * `200 Ok`: If the requested file is a media file and metadata can be extracted. The response `content-type` will be `application/json` and 
+   following attributes will be returned:
+       * `format`: metadata Format used to encode the data.
+       * `file_type`: file type of the audio file.
+       * `title`: title of the track.
+       * `album`: album name of the track.
+       * `artist`: artist name of the track.
+       * `album_artist`: album artist name of the track.
+       * `composer`: composer of the track.
+       * `genre`: genre of the track.
+       * `year`: year of the track.
+       * `lyrics`: lyrics, or an empty string if unavailable.
+       * `comment`: comment, or an empty string if unavailable. 
+ 
+       Depending on the metadata in the file, one or more of these fields may be an empty string
+ * Example of a metadata response:
+ ```json
+{
+    "format": "ID3v2.3",
+    "file_type": "MP3",
+    "title": "All About That Bass",
+    "album": "Billboard Hot 100",
+    "artist": "Meghan Trainor",
+    "album_artist": "Various Artists",
+    "composer": "",
+    "genre": "Chart Hit's",
+    "year": 2014,
+    "lyrics": "",
+    "comment": "AryaN_L33T"
+}
+```
+
+Identifying Content
 ----------------------
 
 The client will identify the content of the documents being retrieved based on the following:
@@ -277,7 +328,7 @@ The client will identify the content of the documents being retrieved based on t
 * For directories, each file has a `mime_type` value for it
 
 
-## Streaming Support
+Streaming Support
 --------------------
 
 It's critical to be able to support streaming so that large files can be played over the network easily.
@@ -289,7 +340,7 @@ Other possibilities not supported yet:
 * [Chunked transfer encoding header](http://en.wikipedia.org/wiki/Chunked_transfer_encoding)
 
 
-## Autodetection of Local vs. Remote
+Autodetection of Local vs. Remote
 ------------------------------------
 
 Autodetection is done by simply doing a `/shares` call to the `local_addr` endpoint and verifying that the result is both `200 OK` and that the data is a proper JSON array.
@@ -297,7 +348,7 @@ Autodetection is done by simply doing a `/shares` call to the `local_addr` endpo
 For technical reasons, DNS cannot be use for this type of autodetection.
 
 
-## Caching
+Caching
 ----------
 
 The server supports the `ETag` scheme for caching.
@@ -306,13 +357,13 @@ The client ought to make use of the HTTP freshness headers whenever possible, to
 
 All requests for directories and files should include an `ETag` or `Last-Modified` header. When the client first requests a resource, it should store this value for future use. On subsequent requests, the client submits requests with `If-None-Match` and `If-Modified-Since` headers based on the stored information. If the resource hasn't changed, the client will see a `304 Not Modified` response, which saves time, CPU and bandwidth most of the time.
 
-## Redirection
+Redirection
 --------------
 
 The client will probably have to support for redirection in the future, as a possible result of some calls. This is to provide a more efficient operation. It's not required at this time.
 
 
-## Error Handling
+Error Handling
 ------------------
 
 If the server cannot contact the origin server, it will issue a `408 Request Timeout`. This can be taken as an indication that the origin HDA is not connected or reachable.
