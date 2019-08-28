@@ -209,7 +209,6 @@ To authenticate, the client app has to issue a `POST` to `/auth` with an `applic
   * The `mime_type` element represents the expected [MIME type](https://en.wikipedia.org/wiki/Internet_media_type) of the file based on the extension (the actual file could have some other data inside it)
   * The `mtime` element is the modification time of the entry
   * The `size` element contains the size of the file at the time of retrieval of the directory in bytes. It is a very large unsigned integer (uint64)
-  * If the entry the case of a directory entry, the `mime_type` is set to `text/directory`, and the `size` is 0
   * The `cache` element contains the details about the thumbnail cache for any media file. It is a json object with the following fields:
     * The `status` element is a boolean field. If `false`, no other field in `cache` is present, and if `true` the remaining fields represents the details about the thumbnail.
     * The `mtime` element is the modification time of the entry
