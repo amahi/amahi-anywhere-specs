@@ -1,371 +1,588 @@
-<style>
-pre {
-    display: block;
-    padding: 10px;
-    margin: 0 0 10.5px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    word-break: break-all;
-    word-wrap: break-word;
-    color: #5a5a5a;
-    background-color: #f8fafc;
-    border: 1px solid #e7e9ed;
-    border-radius: 2px;
-    font-family: "Menlo", "Liberation Mono", "Consolas", "DejaVu Sans Mono", "Ubuntu Mono", "Courier New", "andale mono", "lucida console", monospace;
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>README</title><link href='https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 40px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
 }
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; }
+button, input, select, textarea { color: inherit; font: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 2; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px !important; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror-linenumber { user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; }
+  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { padding-left: 32px; padding-right: 32px; padding-bottom: 0px; break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.html-for-mac .inline-math-svg .MathJax_SVG { vertical-align: 0.2px; }
+.md-math-block .MathJax_SVG_Display { text-align: center; margin: 0px; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; overflow-y: hidden; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: var(--monospace); }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; overflow-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none 0s ease 0s; }
+.MathJax_SVG_Display svg { vertical-align: middle !important; margin-bottom: 0px !important; margin-top: 0px !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="mermaid"] svg, [lang="flow"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+svg[id^="mermaidChart"] { line-height: 1em; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+mark .md-meta { color: rgb(0, 0, 0); opacity: 0.3 !important; }
+
+
+.CodeMirror { height: auto; }
+.CodeMirror.cm-s-inner { background: inherit; }
+.CodeMirror-scroll { overflow: auto hidden; z-index: 3; }
+.CodeMirror-gutter-filler, .CodeMirror-scrollbar-filler { background-color: rgb(255, 255, 255); }
+.CodeMirror-gutters { border-right: 1px solid rgb(221, 221, 221); background: inherit; white-space: nowrap; }
+.CodeMirror-linenumber { padding: 0px 3px 0px 5px; text-align: right; color: rgb(153, 153, 153); }
+.cm-s-inner .cm-keyword { color: rgb(119, 0, 136); }
+.cm-s-inner .cm-atom, .cm-s-inner.cm-atom { color: rgb(34, 17, 153); }
+.cm-s-inner .cm-number { color: rgb(17, 102, 68); }
+.cm-s-inner .cm-def { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-variable { color: rgb(0, 0, 0); }
+.cm-s-inner .cm-variable-2 { color: rgb(0, 85, 170); }
+.cm-s-inner .cm-variable-3 { color: rgb(0, 136, 85); }
+.cm-s-inner .cm-string { color: rgb(170, 17, 17); }
+.cm-s-inner .cm-property { color: rgb(0, 0, 0); }
+.cm-s-inner .cm-operator { color: rgb(152, 26, 26); }
+.cm-s-inner .cm-comment, .cm-s-inner.cm-comment { color: rgb(170, 85, 0); }
+.cm-s-inner .cm-string-2 { color: rgb(255, 85, 0); }
+.cm-s-inner .cm-meta { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-qualifier { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-builtin { color: rgb(51, 0, 170); }
+.cm-s-inner .cm-bracket { color: rgb(153, 153, 119); }
+.cm-s-inner .cm-tag { color: rgb(17, 119, 0); }
+.cm-s-inner .cm-attribute { color: rgb(0, 0, 204); }
+.cm-s-inner .cm-header, .cm-s-inner.cm-header { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-quote, .cm-s-inner.cm-quote { color: rgb(0, 153, 0); }
+.cm-s-inner .cm-hr, .cm-s-inner.cm-hr { color: rgb(153, 153, 153); }
+.cm-s-inner .cm-link, .cm-s-inner.cm-link { color: rgb(0, 0, 204); }
+.cm-negative { color: rgb(221, 68, 68); }
+.cm-positive { color: rgb(34, 153, 34); }
+.cm-header, .cm-strong { font-weight: 700; }
+.cm-del { text-decoration: line-through; }
+.cm-em { font-style: italic; }
+.cm-link { text-decoration: underline; }
+.cm-error { color: red; }
+.cm-invalidchar { color: red; }
+.cm-constant { color: rgb(38, 139, 210); }
+.cm-defined { color: rgb(181, 137, 0); }
+div.CodeMirror span.CodeMirror-matchingbracket { color: rgb(0, 255, 0); }
+div.CodeMirror span.CodeMirror-nonmatchingbracket { color: rgb(255, 34, 34); }
+.cm-s-inner .CodeMirror-activeline-background { background: inherit; }
+.CodeMirror { position: relative; overflow: hidden; }
+.CodeMirror-scroll { height: 100%; outline: 0px; position: relative; box-sizing: content-box; background: inherit; }
+.CodeMirror-sizer { position: relative; }
+.CodeMirror-gutter-filler, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-vscrollbar { position: absolute; z-index: 6; display: none; }
+.CodeMirror-vscrollbar { right: 0px; top: 0px; overflow: hidden; }
+.CodeMirror-hscrollbar { bottom: 0px; left: 0px; overflow: hidden; }
+.CodeMirror-scrollbar-filler { right: 0px; bottom: 0px; }
+.CodeMirror-gutter-filler { left: 0px; bottom: 0px; }
+.CodeMirror-gutters { position: absolute; left: 0px; top: 0px; padding-bottom: 30px; z-index: 3; }
+.CodeMirror-gutter { white-space: normal; height: 100%; box-sizing: content-box; padding-bottom: 30px; margin-bottom: -32px; display: inline-block; }
+.CodeMirror-gutter-wrapper { position: absolute; z-index: 4; background: 0px 0px !important; border: none !important; }
+.CodeMirror-gutter-background { position: absolute; top: 0px; bottom: 0px; z-index: 4; }
+.CodeMirror-gutter-elt { position: absolute; cursor: default; z-index: 4; }
+.CodeMirror-lines { cursor: text; }
+.CodeMirror pre { border-radius: 0px; border-width: 0px; background: 0px 0px; font-family: inherit; font-size: inherit; margin: 0px; white-space: pre; overflow-wrap: normal; color: inherit; z-index: 2; position: relative; overflow: visible; }
+.CodeMirror-wrap pre { overflow-wrap: break-word; white-space: pre-wrap; word-break: normal; }
+.CodeMirror-code pre { border-right: 30px solid transparent; width: fit-content; }
+.CodeMirror-wrap .CodeMirror-code pre { border-right: none; width: auto; }
+.CodeMirror-linebackground { position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 0; }
+.CodeMirror-linewidget { position: relative; z-index: 2; overflow: auto; }
+.CodeMirror-wrap .CodeMirror-scroll { overflow-x: hidden; }
+.CodeMirror-measure { position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden; }
+.CodeMirror-measure pre { position: static; }
+.CodeMirror div.CodeMirror-cursor { position: absolute; visibility: hidden; border-right: none; width: 0px; }
+.CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+.CodeMirror-focused div.CodeMirror-cursor { visibility: inherit; }
+.cm-searching { background: rgba(255, 255, 0, 0.4); }
+@media print {
+  .CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+}
+
+
+:root {
+    --side-bar-bg-color: #fafafa;
+    --control-text-color: #777;
+}
+
+@include-when-export url(https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: "Open Sans","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.6;
+}
+
+#write {
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 30px;
+    padding-bottom: 100px;
+}
+#write > ul:first-child,
+#write > ol:first-child{
+    margin-top: 30px;
+}
+
+a {
+    color: #4183C4;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    text-decoration: none;
+}
+h1 tt,
+h1 code {
+    font-size: inherit;
+}
+h2 tt,
+h2 code {
+    font-size: inherit;
+}
+h3 tt,
+h3 code {
+    font-size: inherit;
+}
+h4 tt,
+h4 code {
+    font-size: inherit;
+}
+h5 tt,
+h5 code {
+    font-size: inherit;
+}
+h6 tt,
+h6 code {
+    font-size: inherit;
+}
+h1 {
+    padding-bottom: .3em;
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+}
+h2 {
+   padding-bottom: .3em;
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+}
+h4 {
+    font-size: 1.25em;
+}
+h5 {
+    font-size: 1em;
+}
+h6 {
+   font-size: 1em;
+    color: #777;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table{
+    margin: 0.8em 0;
+}
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+hr {
+    height: 2px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+}
+
+li p.first {
+    display: inline-block;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+blockquote {
+    border-left: 4px solid #dfe2e5;
+    padding: 0 15px;
+    color: #777777;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+table {
+    padding: 0;
+    word-break: initial;
+}
+table tr {
+    border-top: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 0;
+}
+table tr:nth-child(2n),
+thead {
+    background-color: #f8f8f8;
+}
+table tr th {
+    font-weight: bold;
+    border: 1px solid #dfe2e5;
+    border-bottom: 0;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr td {
+    border: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr th:first-child,
+table tr td:first-child {
+    margin-top: 0;
+}
+table tr th:last-child,
+table tr td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-lines {
+    padding-left: 4px;
+}
+
+.code-tooltip {
+    box-shadow: 0 1px 1px 0 rgba(0,28,36,.3);
+    border-top: 1px solid #eef2f2;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #e7eaed;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
 code {
-  padding: 2px 4px;
-  font-size: 90%;
-  color: #c7254e;
-  background-color: #f9f2f4;
-  border-radius: 2px;
+    background-color: #f3f4f4;
+    padding: 0 2px 0 2px;
 }
-pre code {
-  background-color: #f8fafc;
+
+.md-fences {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding-top: 8px;
+    padding-bottom: 6px;
 }
+
+
+.md-task-list-item > input {
+  margin-left: -1.3em;
+}
+
+@media print {
+    html {
+        font-size: 13px;
+    }
+    table,
+    pre {
+        page-break-inside: avoid;
+    }
+    pre {
+        word-wrap: break-word;
+    }
+}
+
+.md-fences {
+	background-color: #f8f8f8;
+}
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+.md-mathjax-midline {
+    background: #fafafa;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    /*border: 1px solid #ddd;*/
+    border-radius: 3px;
+    padding: 2px 0px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag {
+    color: #a7a7a7;
+    opacity: 1;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+.sidebar-tabs {
+    border-bottom: none;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+header, .context-menu, .megamenu-content, footer{
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.file-node-content:hover .file-node-icon,
+.file-node-content:hover .file-node-open-state{
+    visibility: visible;
+}
+
+.mac-seamless-mode #typora-sidebar {
+    background-color: #fafafa;
+    background-color: var(--side-bar-bg-color);
+}
+
+.md-lang {
+    color: #b4654d;
+}
+
+.html-for-mac .context-menu {
+    --item-hover-bg-color: #E6F0FE;
+}
+
+#md-notification .btn {
+    border: 0;
+}
+
+.dropdown-menu .divider {
+    border-color: #e5e5e5;
+}
+
+.ty-preferences .window-content {
+    background-color: #fafafa;
+}
+
+.ty-preferences .nav-group-item.active {
+    color: white;
+    background: #999;
+}
+
+
 </style>
-<h1>Amahi Anywhere Client API Specification - v0.13</h1>
-<p>The Amahi Anywhere Clients use a REST HTTP protocol for browsing, downloading and streaming files and more.</p>
-<p>The clients can be in local mode (known as &quot;LAN&quot; or &quot;LAN Access&quot; to the user), or remote mode (known as &quot;Remote&quot;). Internally we just call them local or remote. The client can perform streaming and the rest of the functions much faster when using the local mode, being inside the user's LAN, so that should be the favored mode, when available. The client should test for local mode availability dynamically, but only when the user is interacting with the app, <em>never</em> in the background, as this will be costly in terms of battery.</p>
-<h2>API Endpoints</h2>
-<hr />
-<p>Through this document we will have the following API endpoints. The interaction with the endpoint calls is always REST-based and in JSON, unless otherwise specified.</p>
-<ol>
-<li>The <strong>Auth API</strong> endpoint: <code>api.example.com</code> <em>with</em> SSL, verified certs and port 443</li>
-<li>The <strong>PFE API</strong> endpoint (or proxy-front-end) endpoint: <code>pfe.example.com</code> <em>with</em> SSL, verified certs and port 443</li>
-<li>The <strong>Relay API</strong> endpoint is determined by the mode of operation of the client and the info in the <code>PUT /client</code> call to the PFE:</li>
-</ol>
-<ul>
-<li>in remote mode, it's the <code>relay_addr</code> parameter, <strong>always using</strong> SSL, <strong>with</strong> verified certs</li>
-<li>in local mode, it's the <code>local_addr</code> parameter, using plain HTTP, <em>without</em> SSL</li>
-</ul>
-<p><img src="API-interaction.png" alt="API Interaction Diagram" /></p>
-<p>Example of a typical sequence of accesses:</p>
-<ol>
-<li>Authenticate the amahi user against the Amahi API endpoint</li>
-<li>GET /servers (this gives a session token to use for each server)</li>
-<li>POST /auth expects JSON type data with pin key in request body and returns auth token for that hda user</li>
-<li>GET /shares will return the visible shares on a given server (with the session for that server)</li>
-<li>GET /files?s=SomeShare&amp;p=/som/path/or/file.png to get a directory or a file from a server (with the proper session key)</li>
-</ol>
-<p>The user navigates through their files by repeating calls like 5 above with different share names and paths.</p>
-<h2>Authentication</h2>
-<hr />
-<p>The app must collect 1) a username/email and 2) a password, from the user and authenticate this information against Amahi's servers using the <a href="http://oauth.net/">OAuth 2 protocol</a> with the <em>Amahi API</em> endpoint.</p>
-<p>In order for this to work, the app must request a pair of (string) settings from the Amahi team: 1) the App ID and 2) the App Secret. There will be two such pairs of settings, one pair for development/testing and one pair for production/release.</p>
-<p>The OAuth API endpoint base path for production is <code>/api2</code>.</p>
-<p>We use the simplified version of OAuth without web redirection.</p>
-<p>To login, the client app has to first issue a <code>POST</code> to <code>/api2/oauth/token</code> with a body containing the following in it (with the items in capital letters appropriately setup):</p>
-<pre><code>grant_type=password
-client_id=APP_ID
-client_secret=SECRET
-password=PASSWORD
-username=USERNAME
-</code></pre>
-<p>This <code>POST</code> operation will return a JSON structure in the following form:</p>
-<pre lang="json"><code>{
-    &quot;access_token&quot;: &quot;d78abb0542736865f94704521609c230dac03a2f369d043ac212d6933b91410e&quot;,
-    &quot;scope&quot;: &quot;public&quot;,
-    &quot;token_type&quot;: &quot;bearer&quot;
-}
-</code></pre>
-<p>Subsequent calls to the main auth server will have to have the <code>acces_token</code> returned by the OAuth call, like this:</p>
-<pre><code>GET /api2/servers?access_token=d78abb0542736865f94704521609c230dac03a2f369d043ac212d6933b91410e
-</code></pre>
-<h2>Initial request for Amahi servers</h2>
-<hr />
-<p>After authenticating in the user, the client should log the user in. Then it needs to request the Amahi API back-end what servers the user has, also using the <em>Amahi API</em> endpoint. The format of the call is:</p>
-<ul>
-<li>
-<p><code>GET /servers</code></p>
-</li>
-<li>
-<p>The API back-end returns an array of servers that the user has installed</p>
-</li>
-<li>
-<p>The server has a <code>name</code>, which is what is shown to the user</p>
-</li>
-<li>
-<p>The servers may be <code>active</code> (1) or not (0). If active, the user can select it and proceed to browse it. If not, the user must not be given the chance to select it (it should be &quot;greyed out&quot; or some such indication)</p>
-</li>
-<li>
-<p>Each server returns a <code>session</code> token. This is an ephimeral session value and it's <em>required for every subsequent call to the rest of the APIs</em> in the <code>Session</code> header. It may be invalidated after some time without accessing it</p>
-</li>
-<li>
-<p>Each server also has an <code>ip_address</code>, which is either an IP proper or black if the server is not running yet</p>
-</li>
-<li>
-<p>Each server has a <code>fqdn</code>, which is a FQDN with the Dynamic DNS name of the server</p>
-</li>
-<li>
-<p>Example:</p>
-<pre lang="json"><code>  [
-  	{
-  		&quot;name&quot;: &quot;server1&quot;,
-  		&quot;active&quot;: 1,
-  		&quot;session&quot;: &quot;6337fc16d9b31049e3137bb8fc74b86e6b4cb35c&quot;,
-  		&quot;ip_addr&quot;: &quot;1.2.3.4&quot;,
-  		&quot;fqdn&quot;: &quot;server1.yourhda.com&quot;
-  	},
-  	{
-  		&quot;name&quot;: &quot;server2&quot;,
-  		&quot;active&quot;: 0,
-  		&quot;session&quot;: &quot;&quot;,
-  		&quot;ip_addr&quot;: &quot;&quot;,
-  		&quot;fqdn&quot;: &quot;&quot;
-  	}
-  ]
-</code></pre>
-</li>
-</ul>
-<h2>Identifying the client to API endpoints</h2>
-<hr />
-<p>For all calls, the client must include a <code>User-Agent</code> header with its details so that we can support version-specific work-arounds. Here's what's typical for a user agent:</p>
-<pre><code>User-Agent: AmahiAnywhere/&lt;version&gt; (&lt;platform&gt;)
-</code></pre>
-<p>where version is the version of the client and platform contains details of the platform the client is running on.</p>
-<p>Examples:</p>
-<pre><code>User-Agent: AmahiAnywhere/1.3 (iPad; iOS 7.0.4; Scale/2.00)
-User-Agent: AmahiAnywhere/1.0 (Android 4.2.2)
-</code></pre>
-<p>Failure to send this header will result in a <code>400 Bad Request</code> error. We plan to enforce these</p>
-<h2>Resources on a server</h2>
-<hr />
-<h3>Timestamps</h3>
-<p>We have adopted the format of the various time fields (e.g. the <code>mtime</code> element) to be like RFC1123 but hard-coding GMT as the time zone. For example: <code>Tue, 07 May 2013 05:28:09 GMT</code>, <code>Sat, 17 Aug 2013 02:38:32 GMT</code>.</p>
-<p>If apps ever display the timestamp, they should use either relative terms (&quot;4 months ago&quot;, &quot;5 minutes ago&quot;, &quot;about a year ago&quot;) or compensate for the client's current time zone, relative to GMT: someone in GMT+1 should see the same time in the element, plus one hour (using time arithmetic).</p>
-<h3>Initial Client Connection</h3>
-<p>When the client connects to the PFE, the client issues a PUT /client request.  The proxy will return info about how to connect to a given server (HDA).</p>
-<p>The client will have two operating modes (prefrably automaticly detected), <strong>local mode</strong> (when in the local LAN to the HDA) and <strong>remote mode</strong> (when not in the local LAN to the HDA and all access is done via the proxy). Any subsequent requests must be done to either of these two endpoints. Their addresses are obtained by this initial client call to the PFE.</p>
-<ul>
-<li>
-<p><code>PUT /client</code></p>
-</li>
-<li>
-<p>Proxy returns the Amahi Anywhere client version, local address/port and the proxy address/port the HDA is connected to.</p>
-</li>
-<li>
-<p>The local and proxy addresses are an url, including a colon and a port number</p>
-</li>
-<li>
-<p>Access to the local server is done via plain HTTP, regarless of the port</p>
-</li>
-<li>
-<p>Access to the relay server <strong>must always be via a secure TLS/HTTPS</strong> connection, regarless of the port. Checking the certificate is <strong>required</strong></p>
-</li>
-<li>
-<p>Example:</p>
-<pre lang="json"><code>    {&quot;version&quot;: &quot;1.0&quot;, &quot;local_addr&quot;: &quot;http://192.168.1.10:4653&quot;, &quot;relay_addr&quot;: &quot;https://123.456.78.900:443&quot;}
-</code></pre>
-</li>
-</ul>
-<p>From this point on, the calls below can be done to the local_addr or the relay_addr.</p>
-<p>If the client is in local mode, the API endpoint is the address given by <code>local_addr</code>. This should be the preferred mode if it's available.</p>
-<p>If the client is in remote mode, the API endpoint is the address given by <code>relay_addr</code>.</p>
-<h3>HDA User Authentication</h3>
-<p>Since different users can have different access permissions on HDA so each user must identify himself/herself to the HDA. In order to do that the app must request a PIN from the user. This PIN can be sent to the HDA either directly or via Proxy.</p>
-<p>To authenticate, the client app has to issue a <code>POST</code> to <code>/auth</code> with an <code>application/json</code> content-type body containing the following in it:</p>
-<ul>
-<li>
-<p><code>POST /auth</code></p>
-<pre lang="json"><code>  {
-    &quot;pin&quot;: &quot;1234&quot;
-  }
-</code></pre>
-<ul>
-<li>The PIN must be 3 to 5 characters and must match <code>[A-Za-z0-9]+</code>.</li>
-</ul>
-</li>
-<li>
-<p>On successful authentication, a <code>200 OK</code> response will be sent by the server.</p>
-<pre lang="json"><code>  {
-    &quot;auth_token&quot;: &quot;51e3088a2da8f1c8b9285f0fae25b95c&quot;
-  }
-</code></pre>
-<ul>
-<li>This auth_token must be sent in <code>Authorization</code> header for <code>/shares</code>, <code>/files</code> and <code>/logout</code> requests.</li>
-</ul>
-</li>
-<li>
-<p>On unsuccessful authentication, server will respond with <code>401 Unauthorized</code>.</p>
-</li>
-</ul>
-<h3>HDA User Logout</h3>
-<ul>
-<li><code>POST /logout</code></li>
-<li>Logs out the user whose auth_token has been provided and removes its session</li>
-<li>It will return a <code>200 OK</code> response on successful logout</li>
-</ul>
-<h4>Headers</h4>
-<ul>
-<li><strong>Authorization</strong> the <code>auth_token</code> must be sent here.</li>
-</ul>
-<h3>Shares</h3>
-<ul>
-<li>
-<p><code>GET /shares</code></p>
-</li>
-<li>
-<p>Lists all the shares on the HDA that are available to the logged-in user</p>
-</li>
-<li>
-<p>The return type is a json array with a list of shares, sorted alphabetically (without capitalization), with their name as a string in the <code>name</code> element, their modification time in the <code>mtime</code> element and <code>tags</code>.</p>
-</li>
-<li>
-<p>The <code>tags</code> field is a json list of tags associated to a share. The user can put arbitrary information in these fields.</p>
-</li>
-<li>
-<p>The <code>writable</code> field denotes if that share is writable or not for the logged-in user. Client app must appropriately display/hide the Upload or Delete button as per the value of writable field for a given share.</p>
-</li>
-<li>
-<p>Example:</p>
-<pre lang="json"><code>[
-    { &quot;name&quot;: &quot;Books&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;books&quot; ], &quot;writable&quot;: false },
-    { &quot;name&quot;: &quot;Docs&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ ], &quot;writable&quot;: true },
-    { &quot;name&quot;: &quot;Movies&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;movies&quot; ], &quot;writable&quot;: false },
-    { &quot;name&quot;: &quot;Pictures&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;pictures&quot; ], &quot;writable&quot;: false },
-    { &quot;name&quot;: &quot;Torrents&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;movies&quot;, &quot;tv&quot; ], &quot;writable&quot;: false }
-    { &quot;name&quot;: &quot;TV&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;tags&quot;: [ &quot;tv&quot; ], &quot;writable&quot;: true }
-]
-</code></pre>
-</li>
-</ul>
-<h3>Reading Files</h3>
-<ul>
-<li>
-<p><code>GET /files?s=:sharename&amp;p=:path</code></p>
-</li>
-<li>
-<p>Retrieves the file or the directory in the given share <code>:sharename</code> in the <code>s</code> parameter, with the given path <code>:path</code> in the <code>p</code> parameter</p>
-</li>
-<li>
-<p>If the requested file is a directory, this call returns its contents as an array of entries.</p>
-</li>
-<li>
-<p>The <code>name</code> element represents the name of the file or directory</p>
-</li>
-<li>
-<p>The <code>mime_type</code> element represents the expected <a href="https://en.wikipedia.org/wiki/Internet_media_type">MIME type</a> of the file based on the extension (the actual file could have some other data inside it)</p>
-</li>
-<li>
-<p>The <code>mtime</code> element is the modification time of the entry</p>
-</li>
-<li>
-<p>The <code>size</code> element contains the size of the file at the time of retrieval of the directory in bytes. It is a very large unsigned integer (uint64)</p>
-</li>
-<li>
-<p>If the entry the case of a directory entry, the <code>mime_type</code> is set to <code>text/directory</code>, and the <code>size</code> is 0</p>
-</li>
-<li>
-<p>Example for a directory entry:</p>
-<pre lang="json"><code>[
-    { &quot;name&quot;: &quot;dir&quot;, &quot;mime_type&quot;: &quot;text/directory&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 0 },
-    { &quot;name&quot;: &quot;README.txt&quot;, &quot;mime_type&quot;: &quot;text/plain&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 12345 },
-    { &quot;name&quot;: &quot;music.mp3&quot;, &quot;mime_type&quot;: &quot;audio/mpeg&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 23456 },
-    { &quot;name&quot;: &quot;image.jpg&quot;, &quot;mime_type&quot;: &quot;image/jpeg&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 34567 },
-    { &quot;name&quot;: &quot;image.png&quot;, &quot;mime_type&quot;: &quot;image/png&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 28517360 },
-    { &quot;name&quot;: &quot;movie.mkv&quot;, &quot;mime_type&quot;: &quot;video/webm&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 45678 },
-    { &quot;name&quot;: &quot;movie.mp4&quot;, &quot;mime_type&quot;: &quot;video/mp4&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 12345 }
-    { &quot;name&quot;: &quot;large.iso&quot;, &quot;mime_type&quot;: &quot;application/octet-stream&quot;, &quot;mtime&quot;: &quot;Sat, 17 Aug 2013 02:38:32 GMT&quot;, &quot;size&quot;: 32839273198 }
-]
-</code></pre>
-</li>
-<li>
-<p>If the path requested is to an actual file, the file is returned via the HTTP response, with the server's best attempt at detecting the file contents procvided in the <code>Content-type</code> header</p>
-</li>
-<li>
-<p>Caching is honored for both files and directories, using the <code>Etag</code> and <code>If-None-Match</code> headers. See <strong>Caching</strong> below</p>
-</li>
-<li>
-<p>Ranges and partial file requests are also honored (see <strong>Streaming Support</strong> below)</p>
-</li>
-<li>
-<p><code>DELETE /files?s=:sharename&amp;p=:path</code></p>
-</li>
-<li>
-<p>Deletes the file or the directory in the given share <code>:sharename</code> in the <code>s</code> parameter, with the given path <code>:path</code> in the <code>p</code> parameter</p>
-</li>
-<li>
-<p>It returns a 200 code if it succeeded, else there is an error</p>
-</li>
-</ul>
-<h4>Headers</h4>
-<ul>
-<li><strong>Authorization</strong> the <code>auth_token</code> must be sent here.</li>
-</ul>
-<h4>Parameters</h4>
-<ul>
-<li><strong>s</strong> is the name of the share where the file is located</li>
-<li>It must be URL-encoded and the share must exist</li>
-<li><strong>p</strong> is the path to a file or directory, relative from the root directory</li>
-<li>It must be URL-encoded.</li>
-<li>The path must start with %2f (the URL encoding for /).</li>
-<li>If no path is given, the file system root directory is returned.</li>
-</ul>
-<h4>Errors</h4>
-<ul>
-<li>If the <code>Authorization</code> header is not supplied or is wrong, a <code>403 Forbidden</code> is returned.</li>
-<li>If the share does not exist, a <code>400 Bad Request</code> is returned.</li>
-<li>If the path cannot be found, a <code>404 Not Found</code> HTTP error is returned.</li>
-<li>If the path is to a directory, a json representation of all the files and directories therein is returned.</li>
-<li>If the path has invalid characters or is not properly escaped, a <code>400 Bad Request</code> is returned.</li>
-<li>Finally, if error occurs in the remote end, a <code>502 Bad Gateway</code> error is returned.</li>
-</ul>
-<h3>Deleting Files</h3>
-<ul>
-<li><code>DELETE /files?s=:sharename&amp;p=:path</code></li>
-<li>Deletes the file or the directory in the given share <code>:sharename</code> in the <code>s</code> parameter, with the given path <code>:path</code> in the <code>p</code> parameter</li>
-<li>It returns a 200 code if it succeeded, else there is an error</li>
-</ul>
-<h4>Headers</h4>
-<ul>
-<li><strong>Authorization</strong> the <code>auth_token</code> must be sent here.</li>
-</ul>
-<h4>Parameters</h4>
-<p>Same parameter as in reading a file, a share and a path to the file.</p>
-<h4>Errors</h4>
-<p>Same errors as in reading files, and in addition:</p>
-<ul>
-<li>If deletion of the file or folder fails, <code>417 Expectation Failed</code> is returned.</li>
-</ul>
-<h2>Identifying Content</h2>
-<hr />
-<p>The client will identify the content of the documents being retrieved based on the following:</p>
-<ul>
-<li>For actual files, the <code>Content-Type</code> header</li>
-<li>For directories, each file has a <code>mime_type</code> value for it</li>
-</ul>
-<h2>Streaming Support</h2>
-<hr />
-<p>It's critical to be able to support streaming so that large files can be played over the network easily.</p>
-<p>The server supports the <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.7">range header</a> for partial retrieval of content.</p>
-<p>Other possibilities not supported yet:</p>
-<ul>
-<li><a href="http://en.wikipedia.org/wiki/Chunked_transfer_encoding">Chunked transfer encoding header</a></li>
-</ul>
-<h2>Autodetection of Local vs. Remote</h2>
-<hr />
-<p>Autodetection is done by simply doing a <code>/shares</code> call to the <code>local_addr</code> endpoint and verifying that the result is both <code>200 OK</code> and that the data is a proper JSON array.</p>
-<p>For technical reasons, DNS cannot be use for this type of autodetection.</p>
-<h2>Caching</h2>
-<hr />
-<p>The server supports the <code>ETag</code> scheme for caching.</p>
-<p>The client ought to make use of the HTTP freshness headers whenever possible, to lower the load on the back-end servers (and increase the speed of the application).</p>
-<p>All requests for directories and files should include an <code>ETag</code> or <code>Last-Modified</code> header. When the client first requests a resource, it should store this value for future use. On subsequent requests, the client submits requests with <code>If-None-Match</code> and <code>If-Modified-Since</code> headers based on the stored information. If the resource hasn't changed, the client will see a <code>304 Not Modified</code> response, which saves time, CPU and bandwidth most of the time.</p>
-<h2>Redirection</h2>
-<hr />
-<p>The client will probably have to support for redirection in the future, as a possible result of some calls. This is to provide a more efficient operation. It's not required at this time.</p>
-<h2>Error Handling</h2>
-<hr />
-<p>If the server cannot contact the origin server, it will issue a <code>408 Request Timeout</code>. This can be taken as an indication that the origin HDA is not connected or reachable.</p>
-<p>If the server is having trouble, you might see a 5xx error from calls. <code>500</code> means that the app is down. It's the client's responsibility in all cases of 5xx errors to handle it properly towards the user and allow her to retry the requests later.</p>
-<h1>License</h1>
-<p>This spec of the Amahi Anywhere protocol is open source, released under the GPL v3 license.</p>
-<p>This means that this protocol is open, as invented by Amahi in 2013 and subsequent modifications.</p>
-<p>This section explicitly states all that you may do with the protocol.</p>
-<p>The specifications are fully open to the public to be used for any purpose (the Amahi project reserves the right to set the Amahi Anywhere specification and certify compliance). They are free for commercial or noncommercial use. That means that commercial developers may independently write Amahi Anywhere software which is compatible with the specifications for no charge and without restrictions of any kind. There are no licensing fees or royalties of any kind for use of the protocol or its specifications, or for distributing, selling, or applications using the Amahi Anywhere formats/protocols.</p>
-<p>The Amahi project also makes available software that implements the formats, which is distributed according to Open Source licenses as described in their sources.</p>
-<p>The Amahi Anywhere protocol/formats nor any of the implemented formatting methods are covered by any known patent.</p>
-<p>Amahi Anywhere is one of a family of protocols and software of the Amahi project, all created according to the same free ideals.</p>
-<p>If you would like to redistribute parts or all of Amahi Anywhere under different terms, contact the Amahi support line.</p>
-<p>(C) 2014-2018, Amahi</p>
+</head>
+<body class='typora-export os-windows' >
+<div  id='write'  class = 'is-node'><h1><a name="amahi-anywhere-client-api-specification---v013" class="md-header-anchor"></a><span>Amahi Anywhere Client API Specification - v0.13</span></h1><p><span>The Amahi Anywhere Clients use a REST HTTP protocol for browsing, downloading and streaming files and more.</span></p><p><span>The clients can be in local mode (known as &quot;LAN&quot; or &quot;LAN Access&quot; to the user), or remote mode (known as &quot;Remote&quot;). Internally we just call them local or remote. The client can perform streaming and the rest of the functions much faster when using the local mode, being inside the user&#39;s LAN, so that should be the favored mode, when available. The client should test for local mode availability dynamically, but only when the user is interacting with the app, </span><em><span>never</span></em><span> in the background, as this will be costly in terms of battery.</span></p><h2><a name="api-endpoints" class="md-header-anchor"></a><span>API Endpoints</span></h2><hr /><p><span>Through this document we will have the following API endpoints. The interaction with the endpoint calls is always REST-based and in JSON, unless otherwise specified.</span></p><p><span>1) The </span><strong><span>Auth API</span></strong><span> endpoint: </span><code>api.example.com</code><span> </span><em><span>with</span></em><span> SSL, verified certs and port 443</span>
+<span>2) The </span><strong><span>PFE API</span></strong><span> endpoint (or proxy-front-end) endpoint: </span><code>pfe.example.com</code><span> </span><em><span>with</span></em><span> SSL, verified certs and port 443</span>
+<span>3) The </span><strong><span>Relay API</span></strong><span> endpoint is determined by the mode of operation of the client and the info in the </span><code>PUT /client</code><span> call to the PFE:</span></p><ul><li><span>in remote mode, it&#39;s the </span><code>relay_addr</code><span> parameter, </span><strong><span>always using</span></strong><span> SSL, </span><strong><span>with</span></strong><span> verified certs</span></li><li><span>in local mode, it&#39;s the </span><code>local_addr</code><span> parameter, using plain HTTP, </span><em><span>without</span></em><span> SSL</span></li></ul><p><img src="API-interaction.png" referrerpolicy="no-referrer" alt="API Interaction Diagram"></p><p><span>Example of a typical sequence of accesses:</span></p><p><span>1) Authenticate the amahi user against the Amahi API endpoint</span>
+<span>2) GET /servers (this gives a session token to use for each server)</span>
+<span>3) POST /auth expects JSON type data with pin key in request body and returns auth token for that hda user</span>
+<span>4) GET /shares will return the visible shares on a given server (with the session for that server)</span>
+<span>5) GET /files?s=SomeShare&amp;p=/som/path/or/file.png to get a directory or a file from a server (with the proper session key)</span></p><p><span>The user navigates through their files by repeating calls like 5 above with different share names and paths.</span></p><h2><a name="authentication" class="md-header-anchor"></a><span>Authentication</span></h2><hr /><p><span>The app must collect 1) a username/email and 2) a password, from the user and authenticate this information against Amahi&#39;s servers using the </span><a href='http://oauth.net/'><span>OAuth 2 protocol</span></a><span> with the </span><em><span>Amahi API</span></em><span> endpoint.</span></p><p><span>In order for this to work, the app must request a pair of (string) settings from the Amahi team: 1) the App ID and 2) the App Secret. There will be two such pairs of settings, one pair for development/testing and one pair for production/release.</span></p><p><span>The OAuth API endpoint base path for production is </span><code>/api2</code><span>.</span></p><p><span>We use the simplified version of OAuth without web redirection.</span></p><p><span>To login, the client app has to first issue a </span><code>POST</code><span> to </span><code>/api2/oauth/token</code><span> with a body containing the following in it (with the items in capital letters appropriately setup):</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang=""><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang=""><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">grant_type=password</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">client_id=APP_ID</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">client_secret=SECRET</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">password=PASSWORD</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">username=USERNAME</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 112px;"></div><div class="CodeMirror-gutters" style="display: none; height: 112px;"></div></div></div></pre><p><span>This </span><code>POST</code><span> operation will return a JSON structure in the following form:</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="json"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="json"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"access_token"</span>: <span class="cm-string">"d78abb0542736865f94704521609c230dac03a2f369d043ac212d6933b91410e"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"scope"</span>: <span class="cm-string">"public"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"token_type"</span>: <span class="cm-string">"bearer"</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 112px;"></div><div class="CodeMirror-gutters" style="display: none; height: 112px;"></div></div></div></pre><p><span>Subsequent calls to the main auth server will have to have the </span><code>acces_token</code><span> returned by the OAuth call, like this:</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang=""><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang=""><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">GET /api2/servers?access_token=d78abb0542736865f94704521609c230dac03a2f369d043ac212d6933b91410e</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 45px;"></div><div class="CodeMirror-gutters" style="display: none; height: 45px;"></div></div></div></pre><h2><a name="initial-request-for-amahi-servers" class="md-header-anchor"></a><span>Initial request for Amahi servers</span></h2><hr /><p><span>After authenticating in the user, the client should log the user in. Then it needs to request the Amahi API back-end what servers the user has, also using the </span><em><span>Amahi API</span></em><span> endpoint. The format of the call is:</span></p><ul><li><p><code>GET /servers</code></p></li><li><p><span>The API back-end returns an array of servers that the user has installed</span></p></li><li><p><span>The server has a </span><code>name</code><span>, which is what is shown to the user</span></p></li><li><p><span>The servers may be </span><code>active</code><span> (1) or not (0). If active, the user can select it and proceed to browse it. If not, the user must not be given the chance to select it (it should be &quot;greyed out&quot; or some such indication)</span></p></li><li><p><span>Each server returns a </span><code>session</code><span> token. This is an ephimeral session value and it&#39;s </span><em><span>required for every subsequent call to the rest of the APIs</span></em><span> in the </span><code>Session</code><span> header. It may be invalidated after some time without accessing it</span></p></li><li><p><span>Each server also has an </span><code>ip_address</code><span>, which is either an IP proper or black if the server is not running yet</span></p></li><li><p><span>Each server has a </span><code>fqdn</code><span>, which is a FQDN with the Dynamic DNS name of the server</span></p></li><li><p><span>Example:</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="json" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="json"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span>[</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span>{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-string cm-property">"name"</span>: <span class="cm-string">"server1"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-string cm-property">"active"</span>: <span class="cm-number">1</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-string cm-property">"session"</span>: <span class="cm-string">"6337fc16d9b31049e3137bb8fc74b86e6b4cb35c"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-string cm-property">"ip_addr"</span>: <span class="cm-string">"1.2.3.4"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-string cm-property">"fqdn"</span>: <span class="cm-string">"server1.yourhda.com"</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span>},</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span>{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-string cm-property">"name"</span>: <span class="cm-string">"server2"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-string cm-property">"active"</span>: <span class="cm-number">0</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-string cm-property">"session"</span>: <span class="cm-string">""</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-string cm-property">"ip_addr"</span>: <span class="cm-string">""</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-string cm-property">"fqdn"</span>: <span class="cm-string">""</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span>}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span>]</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 358px;"></div><div class="CodeMirror-gutters" style="display: none; height: 358px;"></div></div></div></pre></li></ul><h2><a name="identifying-the-client-to-api-endpoints" class="md-header-anchor"></a><span>Identifying the client to API endpoints</span></h2><hr /><p><span>For all calls, the client must include a </span><code>User-Agent</code><span> header with its details so that we can support version-specific work-arounds. Here&#39;s what&#39;s typical for a user agent:</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang=""><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang=""><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">User-Agent: AmahiAnywhere/&lt;version&gt; (&lt;platform&gt;)</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 22px;"></div><div class="CodeMirror-gutters" style="display: none; height: 22px;"></div></div></div></pre><p><span>where version is the version of the client and platform contains details of the platform the client is running on.</span></p><p><span>Examples:</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang=""><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang=""><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">User-Agent: AmahiAnywhere/1.3 (iPad; iOS 7.0.4; Scale/2.00)</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">User-Agent: AmahiAnywhere/1.0 (Android 4.2.2)</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 45px;"></div><div class="CodeMirror-gutters" style="display: none; height: 45px;"></div></div></div></pre><p><span>Failure to send this header will result in a </span><code>400 Bad Request</code><span> error. We plan to enforce these</span></p><h2><a name="resources-on-a-server" class="md-header-anchor"></a><span>Resources on a server</span></h2><hr /><h3><a name="timestamps" class="md-header-anchor"></a><span>Timestamps</span></h3><p><span>We have adopted the format of the various time fields (e.g. the </span><code>mtime</code><span> element) to be like RFC1123 but hard-coding GMT as the time zone. For example: </span><code>Tue, 07 May 2013 05:28:09 GMT</code><span>, </span><code>Sat, 17 Aug 2013 02:38:32 GMT</code><span>.</span></p><p><span>If apps ever display the timestamp, they should use either relative terms (&quot;4 months ago&quot;, &quot;5 minutes ago&quot;, &quot;about a year ago&quot;) or compensate for the client&#39;s current time zone, relative to GMT: someone in GMT+1 should see the same time in the element, plus one hour (using time arithmetic).</span></p><h3><a name="initial-client-connection" class="md-header-anchor"></a><span>Initial Client Connection</span></h3><p><span>When the client connects to the PFE, the client issues a PUT /client request.  The proxy will return info about how to connect to a given server (HDA).</span></p><p><span>The client will have two operating modes (prefrably automaticly detected), </span><strong><span>local mode</span></strong><span> (when in the local LAN to the HDA) and </span><strong><span>remote mode</span></strong><span> (when not in the local LAN to the HDA and all access is done via the proxy). Any subsequent requests must be done to either of these two endpoints. Their addresses are obtained by this initial client call to the PFE.</span></p><ul><li><p><code>PUT /client</code></p></li><li><p><span>Proxy returns the Amahi Anywhere client version, local address/port and the proxy address/port the HDA is connected to.</span></p></li><li><p><span>The local and proxy addresses are an url, including a colon and a port number</span></p></li><li><p><span>Access to the local server is done via plain HTTP, regarless of the port</span></p></li><li><p><span>Access to the relay server </span><strong><span>must always be via a secure TLS/HTTPS</span></strong><span> connection, regarless of the port. Checking the certificate is </span><strong><span>required</span></strong></p></li><li><p><span>Example:</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="json"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="json"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {<span class="cm-string cm-property">"version"</span>: <span class="cm-string">"1.0"</span>, <span class="cm-string cm-property">"local_addr"</span>: <span class="cm-string">"http://192.168.1.10:4653"</span>, <span class="cm-string cm-property">"relay_addr"</span>: <span class="cm-string">"https://123.456.78.900:443"</span>}</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 45px;"></div><div class="CodeMirror-gutters" style="display: none; height: 45px;"></div></div></div></pre></li></ul><p><span>From this point on, the calls below can be done to the local_addr or the relay_addr.</span></p><p><span>If the client is in local mode, the API endpoint is the address given by </span><code>local_addr</code><span>. This should be the preferred mode if it&#39;s available.</span></p><p><span>If the client is in remote mode, the API endpoint is the address given by </span><code>relay_addr</code><span>.</span></p><h3><a name="hda-user-authentication" class="md-header-anchor"></a><span>HDA User Authentication</span></h3><p><span>Since different users can have different access permissions on HDA so each user must identify himself/herself to the HDA. In order to do that the app must request a PIN from the user. This PIN can be sent to the HDA either directly or via Proxy.</span></p><p><span>To authenticate, the client app has to issue a </span><code>POST</code><span> to </span><code>/auth</code><span> with an </span><code>application/json</code><span> content-type body containing the following in it:</span></p><ul><li><p><code>POST /auth</code></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="json"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="json"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  {</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"pin"</span>: <span class="cm-string">"1234"</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  }</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 67px;"></div><div class="CodeMirror-gutters" style="display: none; height: 67px;"></div></div></div></pre><ul><li><span>The PIN must be 3 to 5 characters and must match </span><code>[A-Za-z0-9]+</code><span>.</span></li></ul></li><li><p><span>On successful authentication, a </span><code>200 OK</code><span> response will be sent by the server.</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="json"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="json"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  {</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"auth_token"</span>: <span class="cm-string">"51e3088a2da8f1c8b9285f0fae25b95c"</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  }</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 67px;"></div><div class="CodeMirror-gutters" style="display: none; height: 67px;"></div></div></div></pre><ul><li><span>This auth_token must be sent in </span><code>Authorization</code><span> header for </span><code>/shares</code><span>, </span><code>/files</code><span> and </span><code>/logout</code><span> requests.</span></li></ul></li><li><p><span>On unsuccessful authentication, server will respond with </span><code>401 Unauthorized</code><span>. </span></p></li></ul><h3><a name="hda-user-logout" class="md-header-anchor"></a><span>HDA User Logout</span></h3><ul><li><code>POST /logout</code></li><li><span>Logs out the user whose auth_token has been provided and removes its session</span></li><li><span>It will return a </span><code>200 OK</code><span> response on successful logout</span></li></ul><h4><a name="headers" class="md-header-anchor"></a><span>Headers</span></h4><ul><li><strong><span>Authorization</span></strong><span> the </span><code>auth_token</code><span> must be sent here.</span></li></ul><h3><a name="shares" class="md-header-anchor"></a><span>Shares</span></h3><ul><li><p><code>GET /shares</code></p></li><li><p><span>Lists all the shares on the HDA that are available to the logged-in user</span></p></li><li><p><span>The return type is a json array with a list of shares, sorted alphabetically (without capitalization), with their name as a string in the </span><code>name</code><span> element, their modification time in the </span><code>mtime</code><span> element and </span><code>tags</code><span>.</span></p></li><li><p><span>The </span><code>tags</code><span> field is a json list of tags associated to a share. The user can put arbitrary information in these fields.</span></p></li><li><p><span>The </span><code>writable</code><span> field denotes if that share is writable or not for the logged-in user. Client app must appropriately display/hide the Upload or Delete button as per the value of writable field for a given share.  </span></p></li><li><p><span>Example:</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="json"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="json"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">[</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  { <span class="cm-string cm-property">"name"</span>: <span class="cm-string">"Books"</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"tags"</span>: [ <span class="cm-string">"books"</span> ], <span class="cm-string cm-property">"writable"</span>: <span class="cm-atom">false</span> },</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  { <span class="cm-string cm-property">"name"</span>: <span class="cm-string">"Docs"</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"tags"</span>: [ ], <span class="cm-string cm-property">"writable"</span>: <span class="cm-atom">true</span> },</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  { <span class="cm-string cm-property">"name"</span>: <span class="cm-string">"Movies"</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"tags"</span>: [ <span class="cm-string">"movies"</span> ], <span class="cm-string cm-property">"writable"</span>: <span class="cm-atom">false</span> },</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  { <span class="cm-string cm-property">"name"</span>: <span class="cm-string">"Pictures"</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"tags"</span>: [ <span class="cm-string">"pictures"</span> ], <span class="cm-string cm-property">"writable"</span>: <span class="cm-atom">false</span> },</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  { <span class="cm-string cm-property">"name"</span>: <span class="cm-string">"Torrents"</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"tags"</span>: [ <span class="cm-string">"movies"</span>, <span class="cm-string">"tv"</span> ], <span class="cm-string cm-property">"writable"</span>: <span class="cm-atom">false</span> }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  { <span class="cm-string">"name"</span>: <span class="cm-string">"TV"</span>, <span class="cm-string">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string">"tags"</span>: [ <span class="cm-string">"tv"</span> ], <span class="cm-string">"writable"</span>: <span class="cm-atom">true</span> }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">]</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 314px;"></div><div class="CodeMirror-gutters" style="display: none; height: 314px;"></div></div></div></pre></li></ul><h3><a name="a-namereading-filesreading-filesa" class="md-header-anchor"></a><a name="reading-files"><span>Reading Files</span></a></h3><ul><li><p><code>GET /files?s=:sharename&amp;p=:path</code></p></li><li><p><span>Retrieves the file or the directory in the given share </span><code>:sharename</code><span> in the </span><code>s</code><span> parameter, with the given path </span><code>:path</code><span> in the </span><code>p</code><span> parameter</span></p></li><li><p><span>If the requested file is a directory, this call returns its contents as an array of entries.</span></p></li><li><p><span>The </span><code>name</code><span> element represents the name of the file or directory</span></p></li><li><p><span>The </span><code>mime_type</code><span> element represents the expected </span><a href='https://en.wikipedia.org/wiki/Internet_media_type'><span>MIME type</span></a><span> of the file based on the extension (the actual file could have some other data inside it)</span></p></li><li><p><span>The </span><code>mtime</code><span> element is the modification time of the entry</span></p></li><li><p><span>The </span><code>size</code><span> element contains the size of the file at the time of retrieval of the directory in bytes. It is a very large unsigned integer (uint64)</span></p></li><li><p><span>The </span><code>cache</code><span> element contains the details about the thumbnail cache for any image file. It is a json object with the following fields:</span></p><ul><li><span>The </span><code>status</code><span> element is a boolean field. If </span><code>false</code><span>, no other field in </span><code>cache</code><span> is present, and if </span><code>true</code><span> the remaining fields represents the details about the thumbnail.</span></li><li><span>The </span><code>mtime</code><span> element is the modification time of the entry</span></li><li><span>The </span><code>size</code><span> element contains the size of the file</span></li><li><span>The </span><code>endpoint</code><span> element contains endpoint for the thumbnail cache. It is essentially of the form: </span><code>/cache?s=&lt;sharename&gt;&amp;p=&lt;file-path&gt;</code></li></ul></li><li><p><span>If the entry the case of a directory entry, the </span><code>mime_type</code><span> is set to </span><code>text/directory</code><span>, the </span><code>size</code><span> is 0, and </span><code>status</code><span> for </span><code>cache</code><span> is </span><code>false</code></p></li><li><p><span>Example for a directory entry:</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="json"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="json"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">[</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  { <span class="cm-string cm-property">"name"</span>: <span class="cm-string">"dir"</span>, <span class="cm-string cm-property">"mime_type"</span>: <span class="cm-string">"text/directory"</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"size"</span>: <span class="cm-number">0</span>, <span class="cm-string cm-property">"cache"</span>: {<span class="cm-string cm-property">"status"</span>: <span class="cm-atom">false</span>} },</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  { <span class="cm-string cm-property">"name"</span>: <span class="cm-string">"README.txt"</span>, <span class="cm-string cm-property">"mime_type"</span>: <span class="cm-string">"text/plain"</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"size"</span>: <span class="cm-number">12345</span>, <span class="cm-string cm-property">"cache"</span>: {<span class="cm-string cm-property">"status"</span>: <span class="cm-atom">false</span>} },</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  { <span class="cm-string cm-property">"name"</span>: <span class="cm-string">"music.mp3"</span>, <span class="cm-string cm-property">"mime_type"</span>: <span class="cm-string">"audio/mpeg"</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"size"</span>: <span class="cm-number">23456</span>, <span class="cm-string cm-property">"cache"</span>: {<span class="cm-string cm-property">"status"</span>: <span class="cm-atom">false</span>} },</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  { <span class="cm-string cm-property">"name"</span>: <span class="cm-string">"image.jpg"</span>, <span class="cm-string cm-property">"mime_type"</span>: <span class="cm-string">"image/jpeg"</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"size"</span>: <span class="cm-number">34567</span>, , <span class="cm-string cm-property">"cache"</span>: {<span class="cm-string cm-property">"status"</span>: <span class="cm-atom">true</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"size"</span>: <span class="cm-number">4567</span>, <span class="cm-string cm-property">"endpoint"</span>: <span class="cm-string">"/cache?s=&lt;sharename&gt;&amp;p=&lt;file-path&gt;"</span>} },</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  { <span class="cm-string cm-property">"name"</span>: <span class="cm-string">"image.png"</span>, <span class="cm-string cm-property">"mime_type"</span>: <span class="cm-string">"image/png"</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"size"</span>: <span class="cm-number">28517360</span>, <span class="cm-string cm-property">"cache"</span>: {<span class="cm-string cm-property">"status"</span>: <span class="cm-atom">true</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"size"</span>: <span class="cm-number">9360</span>, <span class="cm-string cm-property">"endpoint"</span>: <span class="cm-string">"/cache?s=&lt;sharename&gt;&amp;p=&lt;file-path&gt;"</span>} },</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  { <span class="cm-string cm-property">"name"</span>: <span class="cm-string">"movie.mkv"</span>, <span class="cm-string cm-property">"mime_type"</span>: <span class="cm-string">"video/webm"</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"size"</span>: <span class="cm-number">45678</span>, <span class="cm-string cm-property">"cache"</span>: {<span class="cm-string cm-property">"status"</span>: <span class="cm-atom">false</span>} },</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  { <span class="cm-string cm-property">"name"</span>: <span class="cm-string">"movie.mp4"</span>, <span class="cm-string cm-property">"mime_type"</span>: <span class="cm-string">"video/mp4"</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"size"</span>: <span class="cm-number">12345</span>, <span class="cm-string cm-property">"cache"</span>: {<span class="cm-string cm-property">"status"</span>: <span class="cm-atom">false</span>} },</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  { <span class="cm-string cm-property">"name"</span>: <span class="cm-string">"large.iso"</span>, <span class="cm-string cm-property">"mime_type"</span>: <span class="cm-string">"application/octet-stream"</span>, <span class="cm-string cm-property">"mtime"</span>: <span class="cm-string">"Sat, 17 Aug 2013 02:38:32 GMT"</span>, <span class="cm-string cm-property">"size"</span>: <span class="cm-number">32839273198</span>, <span class="cm-string cm-property">"cache"</span>: {<span class="cm-string cm-property">"status"</span>: <span class="cm-atom">false</span>} }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">]</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 448px;"></div><div class="CodeMirror-gutters" style="display: none; height: 448px;"></div></div></div></pre></li><li><p><span>If the path requested is to an actual file, the file is returned via the HTTP response, with the server&#39;s best attempt at detecting the file contents procvided in the </span><code>Content-type</code><span> header</span></p></li><li><p><span>Caching is honored for both files and directories, using the </span><code>Etag</code><span> and </span><code>If-None-Match</code><span> headers. See </span><strong><span>Caching</span></strong><span> below</span></p></li><li><p><span>Ranges and partial file requests are also honored (see </span><strong><span>Streaming Support</span></strong><span> below)</span></p></li><li><p><code>DELETE /files?s=:sharename&amp;p=:path</code></p></li><li><p><span>Deletes the file or the directory in the given share </span><code>:sharename</code><span> in the </span><code>s</code><span> parameter, with the given path </span><code>:path</code><span> in the </span><code>p</code><span> parameter</span></p></li><li><p><span>It returns a 200 code if it succeeded, else there is an error</span></p></li></ul><h4><a name="headers-n173" class="md-header-anchor"></a><span>Headers</span></h4><ul><li><strong><span>Authorization</span></strong><span> the </span><code>auth_token</code><span> must be sent here.</span></li></ul><h4><a name="parameters" class="md-header-anchor"></a><span>Parameters</span></h4><ul><li><strong><span>s</span></strong><span> is the name of the share where the file is located</span></li><li><span>It must be URL-encoded and the share must exist</span></li><li><strong><span>p</span></strong><span> is the path to a file or directory, relative from the root directory</span></li><li><span>It must be URL-encoded.</span></li><li><span>The path must start with %2f (the URL encoding for /).</span></li><li><span>If no path is given, the file system root directory is returned.</span></li></ul><h4><a name="errors" class="md-header-anchor"></a><span>Errors</span></h4><ul><li><span>If the </span><code>Authorization</code><span> header is not supplied or is wrong, a </span><code>403 Forbidden</code><span> is returned.</span></li><li><span>If the share does not exist, a </span><code>400 Bad Request</code><span> is returned.</span></li><li><span>If the path cannot be found, a </span><code>404 Not Found</code><span> HTTP error is returned.</span></li><li><span>If the path is to a directory, a json representation of all the files and directories therein is returned.</span></li><li><span>If the path has invalid characters or is not properly escaped, a </span><code>400 Bad Request</code><span> is returned.</span></li><li><span>Finally, if error occurs in the remote end, a </span><code>502 Bad Gateway</code><span> error is returned.</span></li></ul><h3><a name="uploading-files" class="md-header-anchor"></a><span>Uploading Files</span></h3><ul><li><p><code>POST /files?s=:sharename&amp;p=:path</code></p></li><li><p><span>Upload the file in the given share </span><code>:sharename</code><span> in the </span><code>s</code><span> parameter, with the given path </span><code>:path</code><span> in the </span><code>p</code><span> parameter</span></p></li><li><p><span>Post the data as </span><code>multipart/form-data</code><span> encoded with file as </span><code>file</code><span> field.</span></p></li><li><p><span>Following status codes can be expected:</span></p><ul><li><span>200: if the file is uploaded successfully</span></li><li><span>412: if the posted data is not correctly encoded</span></li><li><span>415: if the file name is invalid</span></li><li><span>417: if </span><code>file</code><span> field in form is emtpy</span></li></ul></li></ul><h3><a name="deleting-files" class="md-header-anchor"></a><span>Deleting Files</span></h3><ul><li><code>DELETE /files?s=:sharename&amp;p=:path</code></li><li><span>Deletes the file or the directory in the given share </span><code>:sharename</code><span> in the </span><code>s</code><span> parameter, with the given path </span><code>:path</code><span> in the </span><code>p</code><span> parameter</span></li><li><span>It returns a 200 code if it succeeded, else there is an error</span></li></ul><h4><a name="headers-n232" class="md-header-anchor"></a><span>Headers</span></h4><ul><li><strong><span>Authorization</span></strong><span> the </span><code>auth_token</code><span> must be sent here.</span></li></ul><h4><a name="parameters-n236" class="md-header-anchor"></a><span>Parameters</span></h4><p><span>Same parameter as in reading a file, a share and a path to the file.</span></p><h4><a name="errors-n238" class="md-header-anchor"></a><span>Errors</span></h4><p><span>Same errors as in reading files, and in addition:</span></p><ul><li><span>If deletion of the file or folder fails, </span><code>417 Expectation Failed</code><span> is returned.</span></li></ul><h3><a name="fetching-metadata" class="md-header-anchor"></a><span>Fetching Metadata</span></h3><ul><li><p><code>GET /meta?s=:sharename&amp;p=:path</code></p></li><li><p><span>Fetches the metadata of media file in the given share </span><code>:sharename</code><span> in the </span><code>s</code><span> parameter, with the given path </span><code>:path</code><span> in the </span><code>p</code><span> parameter</span></p></li><li><p><span>If the requested file is a media file and metadata can be extracted. The response </span><code>content-type</code><span> will be </span><code>application/json</code><span> and following attributes will be returned:</span></p><ul><li><code>tag</code><span>: a metadata container used in conjunction with the audio file format, typical versions of these are ID3v1, ID3v2, and MP4.</span></li><li><code>title</code><span>: title of the track.</span></li><li><code>album</code><span>: album name of the track.</span></li><li><code>artist</code><span>: artist name of the track.</span></li><li><code>album_artist</code><span>: album artist name of the track.</span></li><li><code>composer</code><span>: composer of the track.</span></li><li><code>genre</code><span>: genre of the track.</span></li><li><code>year</code><span>: year of the track.</span></li><li><code>track_number</code><span>: the track number of album</span></li></ul></li><li><p><span>Example of a metadata response:</span></p></li></ul><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="json"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="json"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"tag"</span>: <span class="cm-string">"mp4"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"title"</span>: <span class="cm-string">"Cat Walking"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"album"</span>: <span class="cm-string">"Travel"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"artist"</span>: <span class="cm-string">"Red Cat"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"album_artist"</span>: <span class="cm-string">"Album Artist Cat"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"composer"</span>: <span class="cm-string">"Composercat"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"genre"</span>: <span class="cm-string">"New Wave"</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"year"</span>: <span class="cm-number">2019</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-string cm-property">"track_number"</span>: <span class="cm-number">10</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 246px;"></div><div class="CodeMirror-gutters" style="display: none; height: 246px;"></div></div></div></pre><p><span>   Depending on the metadata and tag in the file, some of these fields may be empty </span></p><ul><li><p><span>Errors: </span></p><ul><li><span>If the server serialize  attributes to json fails, a status </span><code>500 HTTP-Internal Server Error</code><span> is returned.</span></li><li><span>If the requested file is a directory or the metadata to the file is unavailable, a </span><code>404 Not Found</code><span> is returned.</span></li></ul></li></ul><h3><a name="getting-thumbnails" class="md-header-anchor"></a><span>Getting Thumbnails</span></h3><p><code>GET /cache?s=:sharename&amp;p=:path</code></p><ul><li><span>Retrieves the thumbnail for a file in the given share </span><code>:sharename</code><span> in the </span><code>s</code><span> parameter, with the given path </span><code>:path</code><span> in the </span><code>p</code><span> parameter</span></li><li><span>As mentioned in </span><a href='#reading-files'><code>Reading Files</code></a><span>, endpoint for thumbnail is returned by server if it is present.</span></li><li><span>It returns status code 200 and the file content if thumbnail is found else, code 404 returned.</span></li></ul><h2><a name="identifying-content" class="md-header-anchor"></a><span>Identifying Content</span></h2><hr /><p><span>The client will identify the content of the documents being retrieved based on the following:</span></p><ul><li><span>For actual files, the </span><code>Content-Type</code><span> header</span></li><li><span>For directories, each file has a </span><code>mime_type</code><span> value for it</span></li></ul><h2><a name="streaming-support" class="md-header-anchor"></a><span>Streaming Support</span></h2><hr /><p><span>It&#39;s critical to be able to support streaming so that large files can be played over the network easily.</span></p><p><span>The server supports the </span><a href='http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.7'><span>range header</span></a><span> for partial retrieval of content.</span></p><p><span>Other possibilities not supported yet:</span></p><ul><li><a href='http://en.wikipedia.org/wiki/Chunked_transfer_encoding'><span>Chunked transfer encoding header</span></a></li></ul><h2><a name="autodetection-of-local-vs-remote" class="md-header-anchor"></a><span>Autodetection of Local vs. Remote</span></h2><hr /><p><span>Autodetection is done by simply doing a </span><code>/shares</code><span> call to the </span><code>local_addr</code><span> endpoint and verifying that the result is both </span><code>200 OK</code><span> and that the data is a proper JSON array.</span></p><p><span>For technical reasons, DNS cannot be use for this type of autodetection.</span></p><h2><a name="caching" class="md-header-anchor"></a><span>Caching</span></h2><hr /><p><span>The server supports the </span><code>ETag</code><span> scheme for caching.</span></p><p><span>The client ought to make use of the HTTP freshness headers whenever possible, to lower the load on the back-end servers (and increase the speed of the application).</span></p><p><span>All requests for directories and files should include an </span><code>ETag</code><span> or </span><code>Last-Modified</code><span> header. When the client first requests a resource, it should store this value for future use. On subsequent requests, the client submits requests with </span><code>If-None-Match</code><span> and </span><code>If-Modified-Since</code><span> headers based on the stored information. If the resource hasn&#39;t changed, the client will see a </span><code>304 Not Modified</code><span> response, which saves time, CPU and bandwidth most of the time.</span></p><h2><a name="redirection" class="md-header-anchor"></a><span>Redirection</span></h2><hr /><p><span>The client will probably have to support for redirection in the future, as a possible result of some calls. This is to provide a more efficient operation. It&#39;s not required at this time.</span></p><h2><a name="error-handling" class="md-header-anchor"></a><span>Error Handling</span></h2><hr /><p><span>If the server cannot contact the origin server, it will issue a </span><code>408 Request Timeout</code><span>. This can be taken as an indication that the origin HDA is not connected or reachable.</span></p><p><span>If the server is having trouble, you might see a 5xx error from calls. </span><code>500</code><span> means that the app is down. It&#39;s the client&#39;s responsibility in all cases of 5xx errors to handle it properly towards the user and allow her to retry the requests later.</span></p><h1><a name="license" class="md-header-anchor"></a><span>License</span></h1><p><span>This spec of the Amahi Anywhere protocol is open source, released under the GPL v3 license.</span></p><p><span>This means that this protocol is open, as invented by Amahi in 2013 and subsequent modifications.</span></p><p><span>This section explicitly states all that you may do with the protocol.</span></p><p><span>The specifications are fully open to the public to be used for any purpose (the Amahi project reserves the right to set the Amahi Anywhere specification and certify compliance). They are free for commercial or noncommercial use. That means that commercial developers may independently write Amahi Anywhere software which is compatible with the specifications for no charge and without restrictions of any kind. There are no licensing fees or royalties of any kind for use of the protocol or its specifications, or for distributing, selling, or applications using the Amahi Anywhere formats/protocols.</span></p><p><span>The Amahi project also makes available software that implements the formats, which is distributed according to Open Source licenses as described in their sources.</span></p><p><span>The Amahi Anywhere protocol/formats nor any of the implemented formatting methods are covered by any known patent.</span></p><p><span>Amahi Anywhere is one of a family of protocols and software of the Amahi project, all created according to the same free ideals.</span></p><p><span>If you would like to redistribute parts or all of Amahi Anywhere under different terms, contact the Amahi support line. </span></p><p><span>(C) 2014-2018, Amahi</span></p><p>&nbsp;</p></div>
+</body>
+</html>
