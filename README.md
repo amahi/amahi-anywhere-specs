@@ -298,7 +298,8 @@ Same errors as in reading files, and in addition:
     * `genre`: genre of the track.
     * `year`: year of the track.
     * `track_number`: the track number of album
-
+* `album_artwork`: artwork of the album, it returned as an endpoint for the thumbnail cache
+    
  * Example of a metadata response:
 
  ```json
@@ -311,7 +312,8 @@ Same errors as in reading files, and in addition:
     "composer": "Composercat",
     "genre": "New Wave",
     "year": 2019,
-    "track_number": 10
+    "track_number": 10,
+    "album_artwork": "/cache?s=<sharename>&p=<file-path>"
 }
  ```
 
