@@ -284,6 +284,45 @@ Same parameter as in reading a file, a share and a path to the file.
 Same errors as in reading files, and in addition:
  * If deletion of the file or folder fails, `417 Expectation Failed` is returned.
 
+### Fetching Metadata
+
+* `GET /meta?s=:sharename&p=:path`
+ * Fetches the metadata of media file in the given share `:sharename` in the `s` parameter, with the given path `:path` in the `p` parameter
+  * If the requested file is a media file and metadata can be extracted. The response `content-type` will be `application/json` and following attributes will be returned:
+    * `tag`: a metadata container used in conjunction with the audio file format, typical versions of these are ID3v1, ID3v2, and MP4.
+    * `title`: title of the track.
+    * `album`: album name of the track.
+    * `artist`: artist name of the track.
+    * `album_artist`: album artist name of the track.
+    * `composer`: composer of the track.
+    * `genre`: genre of the track.
+    * `year`: year of the track.
+    * `track_number`: the track number of album
+* `album_artwork`: artwork of the album, it returned as an endpoint for the thumbnail cache
+    
+ * Example of a metadata response:
+
+ ```json
+{
+    "tag": "mp4",
+    "title": "Cat Walking",
+    "album": "Travel",
+    "artist": "Red Cat",
+    "album_artist": "Album Artist Cat",
+    "composer": "Composercat",
+    "genre": "New Wave",
+    "year": 2019,
+    "track_number": 10,
+    "album_artwork": "/cache?s=<sharename>&p=<file-path>"
+}
+ ```
+
+   Depending on the metadata and tag in the file, some of these fields may be empty 
+
+* Errors: 
+  *  If the server serialize  attributes to json fails, a status `500 HTTP-Internal Server Error` is returned.
+  *  If the requested file is a directory or the metadata to the file is unavailable, a `404 Not Found` is returned.
+
 ### Getting Thumbnails
 
 `GET /cache?s=:sharename&p=:path`
