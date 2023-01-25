@@ -1,14 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    commonmarker (0.17.7.1)
-      ruby-enum (~> 0.5)
-    concurrent-ruby (1.0.5)
+    commonmarker (0.23.7)
     github-markup (2.0.0)
-    i18n (1.0.0)
-      concurrent-ruby (~> 1.0)
-    ruby-enum (0.7.2)
-      i18n
 
 PLATFORMS
   ruby
